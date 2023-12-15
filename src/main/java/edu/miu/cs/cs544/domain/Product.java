@@ -24,7 +24,10 @@ public class Product {
 
 	private int maxCapacity;
 
+	private Boolean isAvailable;
+
 	@Embedded
 	private AuditData auditData;
+
 	
 }
