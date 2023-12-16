@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.service.impl;
 
+import edu.miu.cs.cs544.domain.AuditData;
 import edu.miu.cs.cs544.domain.CustomError;
 import edu.miu.cs.cs544.domain.Product;
 import edu.miu.cs.cs544.domain.ProductDTO;
@@ -9,6 +10,7 @@ import edu.miu.cs.cs544.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -18,6 +20,7 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public ProductDTO addProduct(ProductDTO productDTO) {
+        productDTO.setIsAvailable(true); //set the product to be available by default
         return ProductAdapter.getProductDTO(productRepository.save(ProductAdapter.getProduct(productDTO)));
     }
 
