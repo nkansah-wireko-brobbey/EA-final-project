@@ -1,6 +1,5 @@
 package edu.miu.cs.cs544.service.impl;
 
-import edu.miu.cs.cs544.domain.AuditData;
 import edu.miu.cs.cs544.domain.CustomError;
 import edu.miu.cs.cs544.domain.Product;
 import edu.miu.cs.cs544.domain.ProductDTO;
@@ -9,8 +8,6 @@ import edu.miu.cs.cs544.repository.ProductRepository;
 import edu.miu.cs.cs544.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -26,7 +23,7 @@ public class ProductServiceImp implements ProductService {
 
     @Override
     public ProductDTO updateProduct(int id, ProductDTO productDTO) throws CustomError {
-        Product product = productRepository.findById(id).orElseThrow(() -> new CustomError("Product with ID : " + id + " does not exist"));
+        productRepository.findById(id).orElseThrow(() -> new CustomError("Product with ID : " + id + " does not exist"));
         return ProductAdapter.getProductDTO(productRepository.save(ProductAdapter.getProduct(productDTO)));
     }
 
