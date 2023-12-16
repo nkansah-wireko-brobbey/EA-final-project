@@ -3,6 +3,7 @@ package edu.miu.cs.cs544.controller;
 import edu.miu.cs.cs544.domain.CustomError;
 import edu.miu.cs.cs544.domain.dto.ReservationDTO;
 import edu.miu.cs.cs544.service.ReservationService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -26,5 +27,23 @@ public class ReservationController {
     public ResponseEntity<?> getReservation(@PathVariable int id) throws CustomError{
         return new ResponseEntity<>(reservationService.getReservation(id), HttpStatus.OK);
     }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteReservation(@PathVariable int id) throws CustomError{
+        reservationService.deleteReservation(id);
+        return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateProduct(@PathVariable int id, @Valid @RequestBody ReservationDTO reservationDTO) throws CustomError {
+        return new ResponseEntity<>(reservationService.updateReservation(id, reservationDTO), HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<?> getAllReservations(){
+        return new ResponseEntity<>(reservationService.getAllReservations(), HttpStatus.OK);
+    }
+
 
 }
