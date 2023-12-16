@@ -1,4 +1,4 @@
-package edu.miu.cs.cs544.controller.impl;
+package edu.miu.cs.cs544.controller;
 
 import edu.miu.cs.cs544.domain.CustomError;
 import edu.miu.cs.cs544.domain.ProductDTO;
