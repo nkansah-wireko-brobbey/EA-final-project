@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.domain;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import jakarta.persistence.*;
@@ -8,9 +9,9 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Entity
 @AllArgsConstructor
 @NoArgsConstructor
+@Entity
 public class Reservation {
 
 	@Id
@@ -21,14 +22,12 @@ public class Reservation {
 	private Customer customer;
 
 	@OneToMany(mappedBy = "reservation", cascade = CascadeType.ALL)
-	private List<Item> items;
+	private List<Item> items = new ArrayList<>();
 
 	@Embedded
 	private AuditData auditData;
 
 	@Enumerated(EnumType.STRING)
 	private ReservationType reservationType;
-
-
 	
 }
