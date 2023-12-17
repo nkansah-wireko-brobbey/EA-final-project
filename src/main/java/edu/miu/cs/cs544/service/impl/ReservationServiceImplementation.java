@@ -15,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationServiceImplementation implements ReservationService {
@@ -33,6 +34,8 @@ public class ReservationServiceImplementation implements ReservationService {
     @Transactional
     public ReservationDTO createReservation(ReservationDTO reservationDTO) throws CustomError {
         //        Write logic
+        System.out.println(reservationDTO);
+
 
         Customer c = new Customer();
 
@@ -40,13 +43,13 @@ public class ReservationServiceImplementation implements ReservationService {
         Customer saved = customerRepository.save(c);
         Reservation reservation =  ReservationAdapter.getReservation(reservationDTO);
         reservation.setCustomer(saved);
-
-
         if(customerRepository.findById(reservation.getCustomer().getId()).isEmpty()){
             throw new CustomError(saved.getId() + " is not valid", HttpStatus.NOT_FOUND);
         }
 
         List<Item> itemList = reservation.getItems();
+
+        System.out.println("items"+ itemList);
         for (Item item : itemList) {
             Optional<Product> availableItem = productRepository.findById(item.getProduct().getId());
             if (availableItem.isPresent()) {
@@ -58,7 +61,7 @@ public class ReservationServiceImplementation implements ReservationService {
             }
 
         }
-
+        System.out.println(reservation);
         return ReservationAdapter.getReservationDTO(reservationRepository.save(reservation));
     }
 
@@ -66,6 +69,18 @@ public class ReservationServiceImplementation implements ReservationService {
     public ReservationDTO getReservation(int id) throws CustomError {
         //        Write logic
         return null;
+
+    }
+
+    public List<ReservationDTO> getAllReservation()throws CustomError{
+       return reservationRepository
+               .findAll()
+               .stream()
+               .map(ReservationAdapter::getReservationDTO)
+               .collect(
+                       Collectors
+                               .toList()
+               );
     }
 
     @Override
@@ -74,16 +89,6 @@ public class ReservationServiceImplementation implements ReservationService {
         return null;
     }
 
-    @Override
-    public void deleteReservation(int id) {
-//        Write logic
-    }
-
-    @Override
-    public List<ReservationDTO> getAllReservations() {
-        //        Write Logic
-        return null;
-    }
 
     @Override
     public List<ReservationDTO> getAllReservationByProductType(ProductType productType) {
