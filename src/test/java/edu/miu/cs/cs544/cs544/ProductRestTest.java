@@ -15,7 +15,7 @@ class ProductRestTest {
     @BeforeAll
     public static void setUp() {
         RestAssured.port = 8080;
-        RestAssured.baseURI = "http://localhost";
+        RestAssured.baseURI = "http://localhost/api";
     }
 
     @Test
