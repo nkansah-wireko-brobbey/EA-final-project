@@ -67,7 +67,11 @@ public class ReservationServiceImplementation implements ReservationService {
     @Override
     public ReservationDTO getReservation(int id) throws CustomError {
         //        Write logic
-        return null;
+        Optional<Reservation> reservation = reservationRepository.findById(id);
+        if (reservation.isPresent())
+            return ReservationAdapter.getReservationDTO(reservation.get());
+
+        throw new CustomError("Reservation with ID: " + id + " not found");
 
     }
     @Override
