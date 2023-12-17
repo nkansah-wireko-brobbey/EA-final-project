@@ -3,10 +3,14 @@ package edu.miu.cs.cs544.domain;
 import java.time.LocalDate;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Data
 @Entity
+@AllArgsConstructor
+@NoArgsConstructor
 public class Item {
 
 	@Id
@@ -22,7 +26,7 @@ public class Item {
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Reservation reservation;
 
-	@ManyToOne(cascade = CascadeType.ALL)
+	@ManyToOne
 	private Product product;
 
 	@Embedded

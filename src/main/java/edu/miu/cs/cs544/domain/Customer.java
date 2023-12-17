@@ -11,7 +11,7 @@ import java.util.List;
 public class Customer {
 
 	@Id
-	@GeneratedValue
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 	
 	private String firstName;
@@ -28,7 +28,7 @@ public class Customer {
 	@ManyToOne(cascade = CascadeType.ALL)
 	private Address custmerBillingAddress;
 
-	@OneToMany
+	@OneToMany(mappedBy = "customer")
 	private List<Reservation> reservationList = new ArrayList<>();
 
 	@OneToOne(cascade = CascadeType.ALL)
