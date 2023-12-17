@@ -1,8 +1,6 @@
 package edu.miu.cs.cs544.domain.adapter;
 
 import edu.miu.cs.cs544.domain.Item;
-import edu.miu.cs.cs544.domain.Product;
-import edu.miu.cs.cs544.domain.ProductDTO;
 import edu.miu.cs.cs544.domain.Reservation;
 import edu.miu.cs.cs544.domain.dto.ItemDTO;
 

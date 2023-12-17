@@ -2,7 +2,7 @@ package edu.miu.cs.cs544.service.impl;
 
 import edu.miu.cs.cs544.domain.CustomError;
 import edu.miu.cs.cs544.domain.Product;
-import edu.miu.cs.cs544.domain.ProductDTO;
+import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import edu.miu.cs.cs544.domain.adapter.ProductAdapter;
 import edu.miu.cs.cs544.repository.ProductRepository;
 import edu.miu.cs.cs544.service.ProductService;
