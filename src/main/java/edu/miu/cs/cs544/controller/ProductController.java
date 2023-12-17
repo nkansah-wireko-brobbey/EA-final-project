@@ -11,11 +11,13 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 @RestController
+@RequestMapping("/api")
 public class ProductController {
     @Autowired
     private ProductService productService;
@@ -51,23 +53,7 @@ public class ProductController {
         return new ResponseEntity<>(productService.getAllProducts(), HttpStatus.OK);
     }
 
-    //catches all the exception thrown by ProductService class and returns a response entity
-    @ExceptionHandler(CustomError.class)
-    public ResponseEntity<?> handleRestErrors(CustomError err) {
-        Map<String, Object> map = new HashMap<>();
-        map.put("error", err.getMessage());
-        return new ResponseEntity<>(map, err.getStatusCode() == null ? HttpStatus.BAD_REQUEST : err.getStatusCode());
-    }
 
-    @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleValidationExceptions(MethodArgumentNotValidException ex) {
 
-        List<FieldError> fieldError = ex.getBindingResult().getFieldErrors();
-        Map<String, Object> map = new HashMap<>();
-        for(FieldError e: fieldError){
-            map.put(e.getField(), e.getDefaultMessage());
-            System.out.println(e.getField() + " " + e.getDefaultMessage());
-        }
-        return new ResponseEntity<>(map, HttpStatus.BAD_REQUEST);
-    }
+    
 }
