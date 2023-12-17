@@ -10,9 +10,12 @@ import java.util.List;
 public interface ReservationService {
 
     ReservationDTO createReservation(ReservationDTO reservationDTO) throws CustomError;
+
     ReservationDTO getReservation(int id) throws CustomError;
+
     ReservationDTO updateReservation(int id, ReservationDTO reservationDTO) throws CustomError;
-    void deleteReservation(int id);
+
+    void deleteReservation(int id) throws CustomError;
 
     List<ReservationDTO> getAllReservations();
 
