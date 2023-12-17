@@ -1,7 +1,7 @@
 package edu.miu.cs.cs544.service;
 
 import edu.miu.cs.cs544.domain.CustomError;
-import edu.miu.cs.cs544.domain.ProductDTO;
+import edu.miu.cs.cs544.domain.dto.ProductDTO;
 
 import java.util.List;
 

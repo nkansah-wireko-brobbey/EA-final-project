@@ -2,6 +2,7 @@ package edu.miu.cs.cs544.service.impl;
 
 import edu.miu.cs.cs544.domain.*;
 import edu.miu.cs.cs544.domain.adapter.ProductAdapter;
+import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import edu.miu.cs.cs544.repository.ProductRepository;
 import edu.miu.cs.cs544.service.ProductService;
 import org.junit.jupiter.api.Test;

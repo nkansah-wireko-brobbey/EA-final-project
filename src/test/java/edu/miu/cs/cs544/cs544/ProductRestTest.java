@@ -1,7 +1,7 @@
 package edu.miu.cs.cs544.cs544;
 
-import edu.miu.cs.cs544.domain.ProductDTO;
 import edu.miu.cs.cs544.domain.ProductType;
+import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;

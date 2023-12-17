@@ -1,5 +1,7 @@
-package edu.miu.cs.cs544.domain;
+package edu.miu.cs.cs544.domain.dto;
 
+import edu.miu.cs.cs544.domain.AuditData;
+import edu.miu.cs.cs544.domain.ProductType;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

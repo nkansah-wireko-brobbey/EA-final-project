@@ -1,7 +1,7 @@
 package edu.miu.cs.cs544.controller;
 
 import edu.miu.cs.cs544.domain.CustomError;
-import edu.miu.cs.cs544.domain.ProductDTO;
+import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import edu.miu.cs.cs544.service.ProductService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
