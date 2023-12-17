@@ -25,7 +25,7 @@ public class ItemAdapter {
                 itemDTO.getOccupants(),
                 itemDTO.getCheckinDate(),
                 itemDTO.getCheckoutDate(),
-                null,
+//                null,
                 ProductAdapter.getProduct(itemDTO.getProduct()),
                 AuditDataAdapter.getAuditData(itemDTO.getAuditData())
         );

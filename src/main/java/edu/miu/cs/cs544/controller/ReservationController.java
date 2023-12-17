@@ -41,6 +41,6 @@ public class ReservationController {
 
     @GetMapping
     public ResponseEntity<?> getAllReservations() throws CustomError {
-        return new ResponseEntity<>(reservationService. getAllReservation(), HttpStatus.OK);
+        return new ResponseEntity<>(reservationService.getAllReservation(), HttpStatus.OK);
     }
 }

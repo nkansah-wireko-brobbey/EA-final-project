@@ -23,8 +23,8 @@ public class Item {
 
 	private LocalDate checkoutDate;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	private Reservation reservation;
+//	@ManyToOne(cascade = CascadeType.ALL)
+//	private Reservation reservation;
 
 	@ManyToOne
 	private Product product;
