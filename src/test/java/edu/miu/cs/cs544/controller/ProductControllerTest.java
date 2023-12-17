@@ -1,4 +1,4 @@
-package edu.miu.cs.cs544.controller.impl;
+package edu.miu.cs.cs544.controller;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

@@ -34,22 +34,20 @@ public class ReservationServiceImplementation implements ReservationService {
     @Transactional
     public ReservationDTO createReservation(ReservationDTO reservationDTO) throws CustomError {
         //        Write logic
-        System.out.println(reservationDTO);
-
 
         Customer c = new Customer();
 
 
         Customer saved = customerRepository.save(c);
-        Reservation reservation =  ReservationAdapter.getReservation(reservationDTO);
+        Reservation reservation = ReservationAdapter.getReservation(reservationDTO);
         reservation.setCustomer(saved);
-        if(customerRepository.findById(reservation.getCustomer().getId()).isEmpty()){
+
+
+        if (customerRepository.findById(reservation.getCustomer().getId()).isEmpty()) {
             throw new CustomError(saved.getId() + " is not valid", HttpStatus.NOT_FOUND);
         }
 
         List<Item> itemList = reservation.getItems();
-
-        System.out.println("items"+ itemList);
         for (Item item : itemList) {
             Optional<Product> availableItem = productRepository.findById(item.getProduct().getId());
             if (availableItem.isPresent()) {
@@ -61,7 +59,7 @@ public class ReservationServiceImplementation implements ReservationService {
             }
 
         }
-        System.out.println(reservation);
+
         return ReservationAdapter.getReservationDTO(reservationRepository.save(reservation));
     }
 
@@ -71,7 +69,7 @@ public class ReservationServiceImplementation implements ReservationService {
         return null;
 
     }
-
+    @Override
     public List<ReservationDTO> getAllReservation()throws CustomError{
        return reservationRepository
                .findAll()
@@ -88,6 +86,18 @@ public class ReservationServiceImplementation implements ReservationService {
         //        Write logic
         return null;
     }
+
+    @Override
+    public void deleteReservation(int id) throws CustomError {
+        Optional<Reservation> reservation = reservationRepository.findById(id);
+        if (reservation.isPresent()) {
+            reservationRepository.delete(reservation.get());
+        } else {
+            throw new CustomError("Reservation with ID: " + id + " not found");
+        }
+    }
+
+
 
 
     @Override

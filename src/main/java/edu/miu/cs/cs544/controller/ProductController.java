@@ -17,13 +17,12 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/products")
 public class ProductController {
     @Autowired
     private ProductService productService;
 
-
-    @PostMapping("/products")
+    @PostMapping
     public ResponseEntity<?> addProduct(@Valid @RequestBody ProductDTO productDTO) {
         return new ResponseEntity<>(productService.addProduct(productDTO), HttpStatus.CREATED);
     }

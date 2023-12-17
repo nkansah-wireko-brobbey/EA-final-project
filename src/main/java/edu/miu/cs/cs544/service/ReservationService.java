@@ -16,7 +16,12 @@ public interface ReservationService {
     List<ReservationDTO> getAllReservation()throws CustomError;
 
     ReservationDTO updateReservation(int id, ReservationDTO reservationDTO) throws CustomError;
+
+    void deleteReservation(int id) throws CustomError;
+
     List<ReservationDTO> getAllReservationByProductType(ProductType productType);
+
     List<ReservationDTO> getAllReservationByReservationType(ReservationType reservationType);
+
 
 }
