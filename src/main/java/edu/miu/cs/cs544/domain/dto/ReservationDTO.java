@@ -5,6 +5,7 @@ import edu.miu.cs.cs544.domain.Customer;
 import edu.miu.cs.cs544.domain.Item;
 import edu.miu.cs.cs544.domain.ReservationType;
 import jakarta.persistence.*;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -18,16 +19,12 @@ public class ReservationDTO {
 
     private Integer id;
 
-    @Column(nullable = false)
-    private Customer customer;
-
-    @Column(nullable = false)
+    @NotNull
     private List<Item> items;
 
-    @Column(nullable = false)
     private AuditData auditData;
 
-    @Column(nullable = false)
+    @NotNull
     private ReservationType reservationType;
 }
 
