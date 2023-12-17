@@ -1,6 +1,7 @@
 package edu.miu.cs.cs544.service.impl;
 
 import edu.miu.cs.cs544.domain.*;
+import edu.miu.cs.cs544.domain.adapter.ProductAdapter;
 import edu.miu.cs.cs544.domain.adapter.ReservationAdapter;
 import edu.miu.cs.cs544.domain.dto.ReservationDTO;
 import edu.miu.cs.cs544.repository.CustomerRepository;
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
 public class ReservationServiceImplementation implements ReservationService {
@@ -65,6 +67,18 @@ public class ReservationServiceImplementation implements ReservationService {
     public ReservationDTO getReservation(int id) throws CustomError {
         //        Write logic
         return null;
+
+    }
+    @Override
+    public List<ReservationDTO> getAllReservation()throws CustomError{
+       return reservationRepository
+               .findAll()
+               .stream()
+               .map(ReservationAdapter::getReservationDTO)
+               .collect(
+                       Collectors
+                               .toList()
+               );
     }
 
     @Override
@@ -83,11 +97,8 @@ public class ReservationServiceImplementation implements ReservationService {
         }
     }
 
-    @Override
-    public List<ReservationDTO> getAllReservations() {
-        //        Write Logic
-        return null;
-    }
+
+
 
     @Override
     public List<ReservationDTO> getAllReservationByProductType(ProductType productType) {

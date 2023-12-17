@@ -40,7 +40,7 @@ public class ReservationController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllReservations() {
-        return new ResponseEntity<>(reservationService.getAllReservations(), HttpStatus.OK);
+    public ResponseEntity<?> getAllReservations() throws CustomError {
+        return new ResponseEntity<>(reservationService. getAllReservation(), HttpStatus.OK);
     }
 }

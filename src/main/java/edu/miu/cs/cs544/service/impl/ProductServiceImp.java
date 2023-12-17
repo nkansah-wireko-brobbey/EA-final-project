@@ -9,7 +9,6 @@ import edu.miu.cs.cs544.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-
 import java.util.List;
 
 @Service
@@ -33,19 +32,20 @@ public class ProductServiceImp implements ProductService {
     public void deleteProduct(int id) throws CustomError {
         if (productRepository.findById(id).isEmpty())
             throw new CustomError("Product with ID : " + id + " does not exist");
-        else productRepository.deleteById(id);
+        else
+            productRepository.deleteById(id);
     }
 
     @Override
     public ProductDTO getProduct(int id) throws CustomError {
-        return ProductAdapter.getProductDTO(productRepository.findById(id).orElseThrow(() -> new CustomError("Product with ID : " + id + " does not exist", HttpStatus.NOT_FOUND)));
+        return ProductAdapter.getProductDTO(productRepository.findById(id)
+                .orElseThrow(() -> new CustomError("Product with ID : " + id + " does not exist", HttpStatus.NOT_FOUND)));
     }
 
     @Override
     public List<ProductDTO> getAllProducts() {
         return productRepository.findAll().stream().map(ProductAdapter::getProductDTO).toList();
     }
-
     public List<ProductDTO> getAllAvailableProducts() {
         return productRepository.findAll().stream().filter(Product::getIsAvailable).map(ProductAdapter::getProductDTO).toList();
     }

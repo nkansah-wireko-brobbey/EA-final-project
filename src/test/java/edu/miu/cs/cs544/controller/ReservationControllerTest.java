@@ -9,6 +9,7 @@ import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import edu.miu.cs.cs544.domain.dto.ReservationDTO;
 import edu.miu.cs.cs544.service.ReservationService;
 import jakarta.validation.constraints.NotNull;
+import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -30,6 +31,7 @@ class ReservationControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
+    @Test
     public void createReservation() throws Exception{
         double nightlyRate = 100;
         ProductDTO productDTO = new ProductDTO(2, "Test Product", "Test Product", "This is a test product", ProductType.Room, nightlyRate, 2, true, null);
