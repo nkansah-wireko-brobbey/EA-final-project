@@ -7,9 +7,14 @@ import java.util.List;
 
 public interface ProductService {
     ProductDTO addProduct(ProductDTO productDTO);
+
     ProductDTO updateProduct(int id, ProductDTO productDTO) throws CustomError;
+
     void deleteProduct(int id) throws CustomError;
+
     ProductDTO getProduct(int id) throws CustomError;
+
     List<ProductDTO> getAllProducts();
+
     List<ProductDTO> getAllAvailableProducts();
 }

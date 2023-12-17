@@ -1,7 +1,6 @@
 package edu.miu.cs.cs544.service.impl;
 
 import edu.miu.cs.cs544.domain.*;
-import edu.miu.cs.cs544.domain.adapter.ProductAdapter;
 import edu.miu.cs.cs544.domain.adapter.ReservationAdapter;
 import edu.miu.cs.cs544.domain.dto.ReservationDTO;
 import edu.miu.cs.cs544.repository.CustomerRepository;
@@ -38,11 +37,11 @@ public class ReservationServiceImplementation implements ReservationService {
 
 
         Customer saved = customerRepository.save(c);
-        Reservation reservation =  ReservationAdapter.getReservation(reservationDTO);
+        Reservation reservation = ReservationAdapter.getReservation(reservationDTO);
         reservation.setCustomer(saved);
 
 
-        if(customerRepository.findById(reservation.getCustomer().getId()).isEmpty()){
+        if (customerRepository.findById(reservation.getCustomer().getId()).isEmpty()) {
             throw new CustomError(saved.getId() + " is not valid", HttpStatus.NOT_FOUND);
         }
 
@@ -75,8 +74,13 @@ public class ReservationServiceImplementation implements ReservationService {
     }
 
     @Override
-    public void deleteReservation(int id) {
-//        Write logic
+    public void deleteReservation(int id) throws CustomError {
+        Optional<Reservation> reservation = reservationRepository.findById(id);
+        if (reservation.isPresent()) {
+            reservationRepository.delete(reservation.get());
+        } else {
+            throw new CustomError("Reservation with ID: " + id + " not found");
+        }
     }
 
     @Override
