@@ -1,8 +1,5 @@
-package edu.miu.cs.cs544.domain;
+package edu.miu.cs.cs544.domain.dto;
 
-import edu.miu.cs.cs544.domain.RoleType;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,7 +7,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UserModel {
+public class UserDTO {
     private String userName;
     private String firstName;
     private String lastName;

@@ -1,14 +1,11 @@
-package edu.miu.cs.cs544.service;
+package edu.miu.cs.cs544.service.impl;
 
-import edu.miu.cs.cs544.controller.UserAlreadyExistException;
-import edu.miu.cs.cs544.domain.UserModel;
-import edu.miu.cs.cs544.domain.PasswordResetToken;
-import edu.miu.cs.cs544.domain.RoleType;
-import edu.miu.cs.cs544.domain.User;
-import edu.miu.cs.cs544.domain.VerificationToken;
+import edu.miu.cs.cs544.domain.*;
+import edu.miu.cs.cs544.domain.dto.UserDTO;
 import edu.miu.cs.cs544.repository.PasswordResetTokenRepository;
 import edu.miu.cs.cs544.repository.UserRepository;
 import edu.miu.cs.cs544.repository.VerificationTokenRepository;
+import edu.miu.cs.cs544.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -18,7 +15,7 @@ import java.util.Optional;
 import java.util.UUID;
 
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -34,18 +31,18 @@ public class UserServiceImpl implements UserService{
 
 
     @Override
-    public User registerUser(UserModel userModel) throws UserAlreadyExistException {
-        if (emailExists(userModel.getEmail())) {
-            throw new UserAlreadyExistException("There is an account with that email address: "
-                    + userModel.getEmail());
+    public User registerUser(UserDTO userDTO)  throws CustomError {
+        if (emailExists(userDTO.getEmail())) {
+            throw new CustomError("There is an account with that email address: "
+                    + userDTO.getEmail());
         }
         User user = new User();
-        user.setUserName(userModel.getUserName());
-        user.setEmail(userModel.getEmail());
-        user.setFirstName(userModel.getFirstName());
-        user.setLastName(userModel.getLastName());
+        user.setUserName(userDTO.getUserName());
+        user.setEmail(userDTO.getEmail());
+        user.setFirstName(userDTO.getFirstName());
+        user.setLastName(userDTO.getLastName());
         user.setRoleType(RoleType.CLIENT);
-        user.setUserPass(passwordEncoder.encode(userModel.getPassword()));
+        user.setUserPass(passwordEncoder.encode(userDTO.getPassword()));
         userRepository.save(user);
         return user;
     }

@@ -1,26 +1,23 @@
 package edu.miu.cs.cs544.config;
 
+import org.springframework.boot.autoconfigure.security.oauth2.client.OAuth2ClientProperties;
+import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.Customizer;
-import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
-import org.springframework.security.config.annotation.web.WebSecurityConfigurer;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configuration.WebSecurityConfiguration;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.oauth2.config.annotation.web.configuration.EnableResourceServer;
+import org.springframework.security.oauth2.jwt.JwtDecoder;
+import org.springframework.security.oauth2.jwt.JwtDecoders;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.web.cors.CorsConfiguration;
-import org.springframework.web.cors.CorsConfigurationSource;
-import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
-
-import java.util.List;
-
 @Configuration
 @EnableWebSecurity
-@EnableMethodSecurity
+@EnableConfigurationProperties(OAuth2ClientProperties.class)
 public class WebSecurityConfig {
 
     private static final String[] WHITE_LIST_URLS = {
@@ -29,10 +26,10 @@ public class WebSecurityConfig {
             "/savePassword",
             "/registrationConfirm",
             "/savePassword",
-            "/changePassword",
             "/login*",
             "/resetPassword*",
             "/resendRegistrationToken",
+            "/logout*", "/error*","/oauth2/**","/login/**"
     };
 
     @Bean
@@ -40,26 +37,26 @@ public class WebSecurityConfig {
         return new BCryptPasswordEncoder(11);
     }
 
-
     @Bean
-    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
-
+    public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         http
-                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests(requests -> requests
-                        .requestMatchers(WHITE_LIST_URLS).permitAll()
-                        .requestMatchers("/api/**").authenticated()
+                .authorizeRequests(authorizeRequests ->
+                        authorizeRequests
+                                .requestMatchers(WHITE_LIST_URLS).permitAll()
+                                .requestMatchers("/api/**").authenticated()
                 )
-                .oauth2Login(oauth2Login ->
-                        oauth2Login
-                                .loginPage("/oauth2/authorization/api-client-oidc")
-                )
-                .oauth2Client(Customizer.withDefaults());
-
+                .oauth2Login(Customizer.withDefaults())
+                .oauth2Client(Customizer.withDefaults())
+                .oauth2ResourceServer(oauth2ResourceServer ->
+                        oauth2ResourceServer
+                                .jwt(Customizer.withDefaults())
+                );
 
         return http.build();
     }
-
-
+    @Bean
+    public JwtDecoder jwtDecoder() {
+        return JwtDecoders.fromIssuerLocation("http://localhost:9000"); // Replace with your issuer URI
+    }
 }

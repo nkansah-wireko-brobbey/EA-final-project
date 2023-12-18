@@ -1,7 +1,7 @@
 package edu.miu.cs.cs544.service;
 
-import edu.miu.cs.cs544.controller.UserAlreadyExistException;
-import edu.miu.cs.cs544.domain.UserModel;
+import edu.miu.cs.cs544.domain.CustomError;
+import edu.miu.cs.cs544.domain.dto.UserDTO;
 import edu.miu.cs.cs544.domain.User;
 import edu.miu.cs.cs544.domain.VerificationToken;
 import org.springframework.stereotype.Service;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Service
 public interface UserService {
-    User registerUser(UserModel userModel) throws UserAlreadyExistException;
+    User registerUser(UserDTO userDTO) throws CustomError;
 
     void createVerificationToken(User user, String token);
 
