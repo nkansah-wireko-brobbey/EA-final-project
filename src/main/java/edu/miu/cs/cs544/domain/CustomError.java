@@ -5,7 +5,7 @@ import lombok.Setter;
 import org.springframework.http.HttpStatus;
 
 public class CustomError extends Exception {
-    private String message;
+    private final String message;
     @Getter
     @Setter
     private HttpStatus statusCode = HttpStatus.BAD_REQUEST;
