@@ -5,7 +5,7 @@ import edu.miu.cs.cs544.domain.State;
 import edu.miu.cs.cs544.domain.dto.StateDTO;
 
 public class StateAdapter {
-    public static State getState(StateDTO stateDTO){
+    public static State getState(StateDTO stateDTO) {
         return new State(
                 stateDTO.getId(),
                 stateDTO.getCode(),
@@ -14,12 +14,12 @@ public class StateAdapter {
         );
     }
 
-    public static StateDTO getStateDTO(State state){
+    public static StateDTO getStateDTO(State state) {
         return new StateDTO(
-          state.getId(),
-          state.getCode(),
-          state.getName(),
-          AuditDataAdapter.getAuditDataDTO(state.getAuditData())
+                state.getId(),
+                state.getCode(),
+                state.getName(),
+                AuditDataAdapter.getAuditDataDTO(state.getAuditData())
         );
     }
 }

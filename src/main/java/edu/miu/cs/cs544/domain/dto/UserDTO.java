@@ -1,10 +1,6 @@
 package edu.miu.cs.cs544.domain.dto;
 
-import edu.miu.cs.cs544.domain.AuditData;
 import edu.miu.cs.cs544.domain.RoleType;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

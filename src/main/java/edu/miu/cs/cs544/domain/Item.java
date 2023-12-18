@@ -13,23 +13,23 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Item {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	
-	private Integer occupants;
-	
-	private LocalDate checkinDate;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	private LocalDate checkoutDate;
+    private Integer occupants;
+
+    private LocalDate checkinDate;
+
+    private LocalDate checkoutDate;
 
 //	@ManyToOne(cascade = CascadeType.ALL)
 //	private Reservation reservation;
 
-	@ManyToOne
-	private Product product;
+    @ManyToOne
+    private Product product;
 
-	@Embedded
-	private AuditData auditData;
-	
+    @Embedded
+    private AuditData auditData;
+
 }

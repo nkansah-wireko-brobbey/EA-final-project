@@ -14,28 +14,28 @@ import java.util.List;
 @Entity
 public class Customer {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	
-	private String firstName;
-	
-	private String lastName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	private String email;
-	
-	private AuditData auditData;
+    private String firstName;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	private Address customerPhysicalAddress;
+    private String lastName;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	private Address customerBillingAddress;
+    private String email;
 
-	@OneToMany(mappedBy = "customer")
-	private List<Reservation> reservationList = new ArrayList<>();
+    private AuditData auditData;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	private User user;
-	
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Address customerPhysicalAddress;
+
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Address customerBillingAddress;
+
+    @OneToMany(mappedBy = "customer")
+    private List<Reservation> reservationList = new ArrayList<>();
+
+    @OneToOne(cascade = CascadeType.ALL)
+    private User user;
+
 }

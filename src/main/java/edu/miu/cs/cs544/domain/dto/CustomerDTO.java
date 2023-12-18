@@ -1,9 +1,5 @@
 package edu.miu.cs.cs544.domain.dto;
 
-import edu.miu.cs.cs544.domain.Address;
-import edu.miu.cs.cs544.domain.AuditData;
-import edu.miu.cs.cs544.domain.Reservation;
-import edu.miu.cs.cs544.domain.User;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;

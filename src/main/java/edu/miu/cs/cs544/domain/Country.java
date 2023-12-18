@@ -9,20 +9,20 @@ import java.util.List;
 @Data
 @Entity
 public class Country {
-	
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	private String code;
-	
-	private String name;
-	
-	private Integer population;
 
-	@Embedded
-	private AuditData auditData;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
+    private String code;
 
-	@OneToMany
-	private List<State> stateList = new ArrayList<>();
-	
+    private String name;
+
+    private Integer population;
+
+    @Embedded
+    private AuditData auditData;
+
+    @OneToMany
+    private List<State> stateList = new ArrayList<>();
+
 }

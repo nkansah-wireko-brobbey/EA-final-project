@@ -10,7 +10,7 @@ import java.util.stream.Collectors;
 public class ReservationAdapter {
 
     // converts reservation object to a DTO
-    public static ReservationDTO getReservationDTO(Reservation reservation){
+    public static ReservationDTO getReservationDTO(Reservation reservation) {
         return new ReservationDTO(reservation.getId(),
                 ItemAdapter.getItemsDTOs(reservation.getItems())
 //                reservation.getCustomer(),
@@ -22,7 +22,7 @@ public class ReservationAdapter {
     }
 
     // Converts DTO to reservation objects
-    public static Reservation getReservation(ReservationDTO reservationDTO){
+    public static Reservation getReservation(ReservationDTO reservationDTO) {
         return new Reservation(reservationDTO.getId(),
                 null,
                 ItemAdapter.getItems(reservationDTO.getItems()),
@@ -31,7 +31,7 @@ public class ReservationAdapter {
         );
     }
 
-    public static List<Reservation> getReservationList(List<ReservationDTO> reservationDTOList){
+    public static List<Reservation> getReservationList(List<ReservationDTO> reservationDTOList) {
         if (reservationDTOList.isEmpty())
             return new ArrayList<>();
         return reservationDTOList
@@ -43,7 +43,7 @@ public class ReservationAdapter {
                 );
     }
 
-    public static List<ReservationDTO> getReservationDTOList(List<Reservation> reservationList){
+    public static List<ReservationDTO> getReservationDTOList(List<Reservation> reservationList) {
         if (reservationList.isEmpty())
             return new ArrayList<>();
 
@@ -55,7 +55,6 @@ public class ReservationAdapter {
                                 .toList()
                 );
     }
-
 
 
 }
