@@ -9,6 +9,7 @@ import edu.miu.cs.cs544.repository.ProductRepository;
 import edu.miu.cs.cs544.repository.ReservationRepository;
 import edu.miu.cs.cs544.service.ReservationService;
 import jakarta.transaction.Transactional;
+import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -18,14 +19,17 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+@NoArgsConstructor(force = true)
 @Service
 public class ReservationServiceImplementation implements ReservationService {
 
+    @Autowired
     private final CustomerRepository customerRepository;
 
-
+    @Autowired
     private final ReservationRepository reservationRepository;
 
+    @Autowired
     private final ProductRepository productRepository;
 
     public ReservationServiceImplementation(CustomerRepository customerRepository,
