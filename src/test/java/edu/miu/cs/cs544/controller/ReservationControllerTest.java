@@ -4,6 +4,7 @@ import edu.miu.cs.cs544.domain.AuditData;
 import edu.miu.cs.cs544.domain.Item;
 import edu.miu.cs.cs544.domain.ProductType;
 import edu.miu.cs.cs544.domain.ReservationType;
+import edu.miu.cs.cs544.domain.dto.AuditDataDTO;
 import edu.miu.cs.cs544.domain.dto.ItemDTO;
 import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import edu.miu.cs.cs544.domain.dto.ReservationDTO;
@@ -17,7 +18,9 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 
@@ -44,4 +47,11 @@ class ReservationControllerTest {
         itemDTOList.add(itemDTO1);
 //        ReservationDTO reservationDTO = new ReservationDTO(13, itemDTOList,null, ReservationType.NEW);
     }
+
+    @Test
+    public void getReservationTest(){
+
+    }
+
+
 }
