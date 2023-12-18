@@ -1,15 +1,15 @@
 package edu.miu.cs.cs544.service.impl;
 
-import edu.miu.cs.cs544.domain.CustomError;
-import edu.miu.cs.cs544.domain.ProductType;
-import edu.miu.cs.cs544.domain.Reservation;
-import edu.miu.cs.cs544.domain.ReservationType;
+import edu.miu.cs.cs544.domain.*;
 import edu.miu.cs.cs544.domain.adapter.ReservationAdapter;
 import edu.miu.cs.cs544.domain.dto.AuditDataDTO;
 import edu.miu.cs.cs544.domain.dto.ItemDTO;
 import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import edu.miu.cs.cs544.domain.dto.ReservationDTO;
+import edu.miu.cs.cs544.repository.CustomerRepository;
+import edu.miu.cs.cs544.repository.ProductRepository;
 import edu.miu.cs.cs544.repository.ReservationRepository;
+import edu.miu.cs.cs544.service.ProductService;
 import edu.miu.cs.cs544.service.ReservationService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
@@ -26,16 +26,10 @@ import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import org.mockito.Mockito;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.TestConfiguration;
-import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.context.annotation.Bean;
 
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
