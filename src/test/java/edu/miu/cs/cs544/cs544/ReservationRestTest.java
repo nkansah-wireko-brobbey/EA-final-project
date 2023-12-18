@@ -52,7 +52,7 @@ public class ReservationRestTest {
         itemDTOList.add(itemDTO);
         reservationDTO.setItems(itemDTOList);
         reservationDTO.setReservationType(ReservationType.NEW);
-
+        System.out.println(reservationDTO);
 
 
         Response response = given()
