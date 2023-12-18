@@ -1,7 +1,6 @@
 package edu.miu.cs.cs544.service.impl;
 
 import edu.miu.cs.cs544.domain.*;
-import edu.miu.cs.cs544.domain.adapter.ProductAdapter;
 import edu.miu.cs.cs544.domain.adapter.ReservationAdapter;
 import edu.miu.cs.cs544.domain.dto.ReservationDTO;
 import edu.miu.cs.cs544.repository.CustomerRepository;

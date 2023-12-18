@@ -35,4 +35,6 @@ public class User {
 	private RoleType roleType;
 
 
+	public User(Integer id, String userName, String userPass, Boolean active, AuditData auditData, RoleType roleType) {
+	}
 }

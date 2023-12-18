@@ -1,10 +1,6 @@
 package edu.miu.cs.cs544.domain.dto;
 
-import edu.miu.cs.cs544.domain.AuditData;
 import edu.miu.cs.cs544.domain.RoleType;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -17,6 +13,12 @@ public class UserDTO {
 
     private String userName;
 
+    private String firstName;
+
+    private String lastName;
+
+    private String email;
+
     private String userPass;
 
     private Boolean active;
@@ -24,4 +26,15 @@ public class UserDTO {
     private AuditDataDTO auditDataDTO;
 
     private RoleType roleType;
+
+    private String matchingPassword;
+
+    public UserDTO(Integer id, String userName, String userPass, Boolean active, AuditDataDTO auditDataDTO, RoleType roleType) {
+    this.id = id;
+    this.userName = userName;
+    this.userPass = userPass;
+    this.active = active;
+    this.auditDataDTO = auditDataDTO;
+    this.roleType = roleType;
+    }
 }
