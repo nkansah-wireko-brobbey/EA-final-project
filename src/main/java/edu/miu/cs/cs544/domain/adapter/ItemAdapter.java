@@ -21,7 +21,7 @@ public class ItemAdapter {
     }
 
     public static Item getItem(ItemDTO itemDTO) {
-        Item item = new Item(itemDTO.getId(),
+        return new Item(itemDTO.getId(),
                 itemDTO.getOccupants(),
                 itemDTO.getCheckinDate(),
                 itemDTO.getCheckoutDate(),
@@ -29,10 +29,9 @@ public class ItemAdapter {
                 ProductAdapter.getProduct(itemDTO.getProduct()),
                 AuditDataAdapter.getAuditData(itemDTO.getAuditData())
         );
-        return item;
     }
 
-    public static List<Item> getItems(List<ItemDTO> itemDTOList){
+    public static List<Item> getItems(List<ItemDTO> itemDTOList) {
         if (itemDTOList == null)
             return new ArrayList<>();
 
@@ -41,7 +40,7 @@ public class ItemAdapter {
                 .collect(Collectors.toList());
     }
 
-    public static List<ItemDTO> getItemsDTOs(List<Item> itemList){
+    public static List<ItemDTO> getItemsDTOs(List<Item> itemList) {
         if (itemList == null)
             return new ArrayList<>();
 

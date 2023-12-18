@@ -11,21 +11,21 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class Address {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	private String line1;
-	
-	private String line2;
-	
-	private String city;
-	@ManyToOne
-	private State state;
-	
-	private String postalCode;
+    private String line1;
 
-	@Embedded
-	private AuditData auditData;
-	
+    private String line2;
+
+    private String city;
+    @ManyToOne
+    private State state;
+
+    private String postalCode;
+
+    @Embedded
+    private AuditData auditData;
+
 }

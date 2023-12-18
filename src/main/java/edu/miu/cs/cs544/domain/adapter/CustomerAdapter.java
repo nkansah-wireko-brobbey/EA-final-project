@@ -1,11 +1,10 @@
 package edu.miu.cs.cs544.domain.adapter;
 
 import edu.miu.cs.cs544.domain.Customer;
-import edu.miu.cs.cs544.domain.dto.AuditDataDTO;
 import edu.miu.cs.cs544.domain.dto.CustomerDTO;
 
 public class CustomerAdapter {
-    public static Customer getCustomer(CustomerDTO customerDTO){
+    public static Customer getCustomer(CustomerDTO customerDTO) {
         return new Customer(
                 customerDTO.getId(),
                 customerDTO.getFirstName(),
@@ -18,7 +17,8 @@ public class CustomerAdapter {
                 UserAdapter.getUser(customerDTO.getUserDTO())
         );
     }
-    public static CustomerDTO getCustomerDTO(Customer customer){
+
+    public static CustomerDTO getCustomerDTO(Customer customer) {
         return new CustomerDTO(
                 customer.getId(),
                 customer.getFirstName(),

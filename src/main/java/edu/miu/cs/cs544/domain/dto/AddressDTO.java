@@ -1,10 +1,5 @@
 package edu.miu.cs.cs544.domain.dto;
 
-import edu.miu.cs.cs544.domain.AuditData;
-import edu.miu.cs.cs544.domain.State;
-import jakarta.annotation.Nonnull;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

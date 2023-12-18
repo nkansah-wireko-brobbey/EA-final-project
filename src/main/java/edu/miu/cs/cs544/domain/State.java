@@ -11,15 +11,15 @@ import lombok.NoArgsConstructor;
 @Entity
 public class State {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	private String code;
-	
-	private String name;
+    private String code;
 
-	@Embedded
-	private AuditData auditData;
-	
+    private String name;
+
+    @Embedded
+    private AuditData auditData;
+
 }
