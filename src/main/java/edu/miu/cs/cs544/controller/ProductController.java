@@ -10,12 +10,12 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("/api/products")
+@RequestMapping("/api")
 public class ProductController {
     @Autowired
     private ProductService productService;
 
-    @PostMapping
+    @PostMapping("/products")
     public ResponseEntity<?> addProduct(@Valid @RequestBody ProductDTO productDTO) {
         return new ResponseEntity<>(productService.addProduct(productDTO), HttpStatus.CREATED);
     }
