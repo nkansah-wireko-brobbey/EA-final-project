@@ -11,6 +11,7 @@ import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +29,8 @@ public class ReservationRestTest {
 
     @Test
     public void testCreateReservation() {
-        ReservationDTO reservationDTO = new ReservationDTO();
-        ItemDTO itemDTO = new ItemDTO();
+
+        //create a test product for reservation
         ProductDTO productDTO = new ProductDTO();
         productDTO.setName("Test Product");
         productDTO.setExcerpt("Test Product");
@@ -37,19 +38,33 @@ public class ReservationRestTest {
         productDTO.setType(ProductType.Room);
         productDTO.setMaxCapacity(2);
         productDTO.setNightlyRate(100.0);
+
+        // Send POST request to add the product and capture the response
+        Response response = given()
+                .body(productDTO)
+                .contentType(ContentType.JSON)
+                .when()
+                .post("/products")
+                .then()
+                .statusCode(201)
+                .extract()
+                .response();
+        int productId = response.jsonPath().getInt("id");
+        productDTO.setId(productId);
+
+        ReservationDTO reservationDTO = new ReservationDTO();
+        ItemDTO itemDTO = new ItemDTO();
         itemDTO.setProduct(productDTO);
         itemDTO.setOccupants(5);
-        itemDTO.setCheckinDate(null);
-        itemDTO.setCheckoutDate(null);
-        itemDTO.setAuditData(null);
+        itemDTO.setCheckinDate(LocalDate.now());
+        itemDTO.setCheckoutDate(LocalDate.now());
         List<ItemDTO> itemDTOList = new ArrayList<>();
         itemDTOList.add(itemDTO);
         reservationDTO.setItems(itemDTOList);
         reservationDTO.setReservationType(ReservationType.NEW);
+        System.out.println(reservationDTO);
 
-
-
-        Response response = given()
+        Response response1 = given()
                 .body(reservationDTO)
                 .contentType(ContentType.JSON)
                 .when()
@@ -59,33 +74,39 @@ public class ReservationRestTest {
                 .extract()
                 .response();
 
-        int id = response.jsonPath().getInt("id");
-
-        System.out.println("Id: " + id + " Actual Response Body: " + response.asString());
+        int id = response1.jsonPath().getInt("id");
 
         given()
                 .when()
                 .get("/reservations/" + id)
                 .then()
                 .statusCode(200)
-                .body("items[0]", equalTo(itemDTO))
-                .body("auditData", equalTo(null))
-                .body("reservationType", equalTo(ReservationType.NEW));
+                .body("items[0].occupants", equalTo(5))
+                .body("reservationType", equalTo("NEW"));
 
 
-
+        //clean up
         given()
                 .when()
                 .delete("/reservations/" + id)
                 .then()
                 .statusCode(200);
+
+        // Send DELETE request to clean the new product
+        given()
+                .when()
+                .delete("/products/" + productId)
+                .then()
+                .statusCode(200);
     }
+
     @Test
-    public void testGetReservations(){
+    public void testGetReservations() {
 
     }
+
     @Test
-    public void testGetReservationByID(){
+    public void testGetReservationByID() {
 
     }
 }
