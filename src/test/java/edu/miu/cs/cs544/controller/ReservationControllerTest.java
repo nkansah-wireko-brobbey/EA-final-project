@@ -65,7 +65,7 @@ class ReservationControllerTest {
 
     @Test
     public void getReservationTest() throws Exception {
-    ReservationDTO reservationDTO = createDummyReservationDTO();
+    ReservationDTO reservationDTO = createDummyReservationDTO(1);
     Integer reservationId = ReservationAdapter.getReservation(reservationDTO).getId();
 
         Mockito.when(reservationService.getReservation(reservationId)).thenReturn(reservationDTO);
@@ -76,7 +76,30 @@ class ReservationControllerTest {
 
 
     }
-    private ReservationDTO createDummyReservationDTO() {
+    @Test
+    public void getAllReservationTest() throws Exception {
+    ReservationDTO reservationDTO = createDummyReservationDTO(1);
+    ReservationDTO reservationDTO2 = createDummyReservationDTO(2);
+
+    ReservationAdapter.getReservation(reservationDTO2).setId(2);
+
+    Integer reservationId = ReservationAdapter.getReservation(reservationDTO).getId();
+    Integer reservationId2 = ReservationAdapter.getReservation(reservationDTO2).getId();
+
+    List<ReservationDTO> reservationDTOList = List.of(reservationDTO,reservationDTO2);
+
+        System.out.println(reservationDTOList);
+
+        Mockito.when(reservationService.getAllReservation()).thenReturn(reservationDTOList);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/reservations"))
+                .andExpect(status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(1))
+                .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(2));
+
+
+    }
+    private ReservationDTO createDummyReservationDTO(Integer reservationId) {
         // Create a dummy ItemDTO
         ItemDTO itemDTO = new ItemDTO();
         itemDTO.setId(1);
@@ -107,12 +130,11 @@ class ReservationControllerTest {
 
         // Create a dummy ReservationDTO
         ReservationDTO reservationDTO = new ReservationDTO();
-        reservationDTO.setId(1);
+        reservationDTO.setId(reservationId);
         reservationDTO.setItems(Collections.singletonList(itemDTO));
         reservationDTO.setAuditData(auditDataDTO);
         reservationDTO.setReservationType(ReservationType.NEW);
 
-        System.out.println(reservationDTO);
 
         return reservationDTO;
     }
