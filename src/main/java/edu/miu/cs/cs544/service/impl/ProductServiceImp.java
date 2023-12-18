@@ -2,11 +2,12 @@ package edu.miu.cs.cs544.service.impl;
 
 import edu.miu.cs.cs544.domain.CustomError;
 import edu.miu.cs.cs544.domain.Product;
-import edu.miu.cs.cs544.domain.ProductDTO;
+import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import edu.miu.cs.cs544.domain.adapter.ProductAdapter;
 import edu.miu.cs.cs544.repository.ProductRepository;
 import edu.miu.cs.cs544.service.ProductService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
@@ -38,7 +39,7 @@ public class ProductServiceImp implements ProductService {
     @Override
     public ProductDTO getProduct(int id) throws CustomError {
         return ProductAdapter.getProductDTO(productRepository.findById(id)
-                .orElseThrow(() -> new CustomError("Product with ID : " + id + " does not exist")));
+                .orElseThrow(() -> new CustomError("Product with ID : " + id + " does not exist", HttpStatus.NOT_FOUND)));
     }
 
     @Override

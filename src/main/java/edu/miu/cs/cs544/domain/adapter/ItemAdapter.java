@@ -1,10 +1,11 @@
 package edu.miu.cs.cs544.domain.adapter;
 
 import edu.miu.cs.cs544.domain.Item;
-import edu.miu.cs.cs544.domain.Product;
-import edu.miu.cs.cs544.domain.ProductDTO;
-import edu.miu.cs.cs544.domain.Reservation;
 import edu.miu.cs.cs544.domain.dto.ItemDTO;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class ItemAdapter {
 
@@ -14,7 +15,8 @@ public class ItemAdapter {
                 item.getCheckinDate(),
                 item.getCheckoutDate(),
                 ProductAdapter.getProductDTO(item.getProduct()),
-                item.getAuditData());
+                AuditDataAdapter.getAuditDataDTO(item.getAuditData())
+        );
         return itemDTO;
     }
 
@@ -23,9 +25,29 @@ public class ItemAdapter {
                 itemDTO.getOccupants(),
                 itemDTO.getCheckinDate(),
                 itemDTO.getCheckoutDate(),
-                new Reservation(),
-                ProductAdapter.getProduct(itemDTO.getProductDTO()),
-                itemDTO.getAuditData());
+//                null,
+                ProductAdapter.getProduct(itemDTO.getProduct()),
+                AuditDataAdapter.getAuditData(itemDTO.getAuditData())
+        );
         return item;
     }
+
+    public static List<Item> getItems(List<ItemDTO> itemDTOList){
+        if (itemDTOList == null)
+            return new ArrayList<>();
+
+        return itemDTOList.stream()
+                .map(ItemAdapter::getItem)
+                .collect(Collectors.toList());
+    }
+
+    public static List<ItemDTO> getItemsDTOs(List<Item> itemList){
+        if (itemList == null)
+            return new ArrayList<>();
+
+        return itemList.stream()
+                .map(ItemAdapter::getItemDTO)
+                .collect(Collectors.toList());
+    }
+
 }

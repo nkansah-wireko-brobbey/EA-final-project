@@ -1,7 +1,9 @@
-package edu.miu.cs.cs544.domain;
+package edu.miu.cs.cs544.domain.dto;
 
-import jakarta.persistence.Column;
+import edu.miu.cs.cs544.domain.AuditData;
+import edu.miu.cs.cs544.domain.ProductType;
 import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -13,13 +15,13 @@ import lombok.NoArgsConstructor;
 public class ProductDTO {
 
     private Integer id;
-    @Column(nullable = false)
+    @NotNull
     private String name;
-    @Column(nullable = false)
+    @NotNull
     private String description;
 
     private String excerpt;
-
+    @NotNull
     private ProductType type;
 
     @Min(value = 0, message = "Nightly rate must be a positive value")

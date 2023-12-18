@@ -1,7 +1,7 @@
 package edu.miu.cs.cs544.domain.adapter;
 
 import edu.miu.cs.cs544.domain.Product;
-import edu.miu.cs.cs544.domain.ProductDTO;
+import edu.miu.cs.cs544.domain.dto.ProductDTO;
 
 public class ProductAdapter {
     public static ProductDTO getProductDTO(Product product) {

@@ -14,7 +14,7 @@ public class ReservationController {
 
     private final ReservationService reservationService;
 
-    public ReservationController(ReservationService reservationService){
+    public ReservationController(ReservationService reservationService) {
         this.reservationService = reservationService;
     }
 
@@ -24,16 +24,15 @@ public class ReservationController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getReservation(@PathVariable int id) throws CustomError{
+    public ResponseEntity<?> getReservation(@PathVariable int id) throws CustomError {
         return new ResponseEntity<>(reservationService.getReservation(id), HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deleteReservation(@PathVariable int id) throws CustomError{
+    public ResponseEntity<?> deleteReservation(@PathVariable int id) throws CustomError {
         reservationService.deleteReservation(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }
-
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable int id, @Valid @RequestBody ReservationDTO reservationDTO) throws CustomError {
@@ -41,9 +40,7 @@ public class ReservationController {
     }
 
     @GetMapping
-    public ResponseEntity<?> getAllReservations(){
-        return new ResponseEntity<>(reservationService.getAllReservations(), HttpStatus.OK);
+    public ResponseEntity<?> getAllReservations() throws CustomError {
+        return new ResponseEntity<>(reservationService.getAllReservation(), HttpStatus.OK);
     }
-
-
 }

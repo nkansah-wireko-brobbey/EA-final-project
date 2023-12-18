@@ -1,6 +1,6 @@
 package edu.miu.cs.cs544.domain.dto;
 
-import edu.miu.cs.cs544.domain.*;
+import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -11,6 +11,7 @@ import java.time.LocalDate;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Valid
 public class ItemDTO {
 
     private Integer id;
@@ -24,9 +25,10 @@ public class ItemDTO {
     @NotNull
     private LocalDate checkoutDate;
 
+//    private ReservationDTO reservationDTO;
 
     @NotNull
-    private ProductDTO productDTO;
+    private ProductDTO product;
 
-    private AuditData auditData;
+    private AuditDataDTO auditData;
 }
