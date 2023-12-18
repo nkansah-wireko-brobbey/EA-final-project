@@ -11,20 +11,20 @@ import lombok.NoArgsConstructor;
 @Entity
 public class User {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	
-	private String userName;
-	
-	private String userPass;
-	
-	private Boolean active;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	@Embedded
-	private AuditData auditData;
+    private String userName;
 
-	@Enumerated(EnumType.STRING)
-	private RoleType roleType;
-	
+    private String userPass;
+
+    private Boolean active;
+
+    @Embedded
+    private AuditData auditData;
+
+    @Enumerated(EnumType.STRING)
+    private RoleType roleType;
+
 }

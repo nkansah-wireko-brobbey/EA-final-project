@@ -21,14 +21,21 @@ import java.util.stream.Collectors;
 @Service
 public class ReservationServiceImplementation implements ReservationService {
 
-    @Autowired
-    private CustomerRepository customerRepository;
+    private final CustomerRepository customerRepository;
 
-    @Autowired
-    private ReservationRepository reservationRepository;
 
-    @Autowired
-    private ProductRepository productRepository;
+    private final ReservationRepository reservationRepository;
+
+    private final ProductRepository productRepository;
+
+    public ReservationServiceImplementation(CustomerRepository customerRepository,
+                                            ReservationRepository reservationRepository,
+                                            ProductRepository productRepository) {
+        this.customerRepository = customerRepository;
+        this.reservationRepository = reservationRepository;
+        this.productRepository = productRepository;
+
+    }
 
 
     @Override
@@ -66,7 +73,6 @@ public class ReservationServiceImplementation implements ReservationService {
 
     @Override
     public ReservationDTO getReservation(int id) throws CustomError {
-        //        Write logic
         Optional<Reservation> reservation = reservationRepository.findById(id);
         if (reservation.isPresent())
             return ReservationAdapter.getReservationDTO(reservation.get());
@@ -74,19 +80,20 @@ public class ReservationServiceImplementation implements ReservationService {
         throw new CustomError("Reservation with ID: " + id + " not found");
 
     }
+
     @Override
     @Transactional
-    public List<ReservationDTO> getAllReservation()throws CustomError{
-      List<ReservationDTO> reservationDTOList = reservationRepository
-              .findAll()
-              .stream()
-              .map(ReservationAdapter::getReservationDTO)
-              .collect(
-                      Collectors
-                              .toList()
-              );
+    public List<ReservationDTO> getAllReservation() throws CustomError {
+        List<ReservationDTO> reservationDTOList = reservationRepository
+                .findAll()
+                .stream()
+                .map(ReservationAdapter::getReservationDTO)
+                .collect(
+                        Collectors
+                                .toList()
+                );
 //        System.out.println("Reservation Full Data : "+reservationRepository.findAll());
-       return reservationDTOList;
+        return reservationDTOList;
     }
 
     @Override
@@ -104,8 +111,6 @@ public class ReservationServiceImplementation implements ReservationService {
             throw new CustomError("Reservation with ID: " + id + " not found");
         }
     }
-
-
 
 
     @Override
