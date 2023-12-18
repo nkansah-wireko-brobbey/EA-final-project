@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -66,19 +67,26 @@ public class ReservationServiceImplementation implements ReservationService {
     @Override
     public ReservationDTO getReservation(int id) throws CustomError {
         //        Write logic
-        return null;
+        Optional<Reservation> reservation = reservationRepository.findById(id);
+        if (reservation.isPresent())
+            return ReservationAdapter.getReservationDTO(reservation.get());
+
+        throw new CustomError("Reservation with ID: " + id + " not found");
 
     }
     @Override
+    @Transactional
     public List<ReservationDTO> getAllReservation()throws CustomError{
-       return reservationRepository
-               .findAll()
-               .stream()
-               .map(ReservationAdapter::getReservationDTO)
-               .collect(
-                       Collectors
-                               .toList()
-               );
+      List<ReservationDTO> reservationDTOList = reservationRepository
+              .findAll()
+              .stream()
+              .map(ReservationAdapter::getReservationDTO)
+              .collect(
+                      Collectors
+                              .toList()
+              );
+//        System.out.println("Reservation Full Data : "+reservationRepository.findAll());
+       return reservationDTOList;
     }
 
     @Override

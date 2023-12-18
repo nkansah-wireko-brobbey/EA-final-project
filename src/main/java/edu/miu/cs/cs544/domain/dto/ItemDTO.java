@@ -25,6 +25,8 @@ public class ItemDTO {
     @NotNull
     private LocalDate checkoutDate;
 
+//    private ReservationDTO reservationDTO;
+
     @NotNull
     private ProductDTO product;
 
