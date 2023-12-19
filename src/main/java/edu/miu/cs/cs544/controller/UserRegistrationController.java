@@ -1,13 +1,13 @@
 package edu.miu.cs.cs544.controller;
 
 
-import edu.miu.cs.cs544.domain.CustomError;
-import edu.miu.cs.cs544.domain.User;
+import edu.miu.cs.cs544.domain.*;
 import edu.miu.cs.cs544.domain.dto.CustomerDTO;
 import edu.miu.cs.cs544.domain.dto.PasswordDTO;
-import edu.miu.cs.cs544.domain.VerificationToken;
+import edu.miu.cs.cs544.domain.dto.UserDTO;
 import edu.miu.cs.cs544.domain.dto.UserUpdateDTO;
 import edu.miu.cs.cs544.event.RegistrationCompleteEvent;
+import edu.miu.cs.cs544.repository.CustomerRepository;
 import edu.miu.cs.cs544.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -16,8 +16,13 @@ import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -32,10 +37,9 @@ public class UserRegistrationController {
     @Autowired
     private ApplicationEventPublisher eventPublisher;
 
-    @GetMapping("/api/userinfo")
-    public ResponseEntity<?> getUserInfo(Authentication authentication) {
-        return new ResponseEntity<>("hi"+userService.findUserByEmail(authentication.getName()), HttpStatus.BAD_REQUEST);
-    }
+    @Autowired
+    private CustomerRepository customerRepository;
+
 
     @PostMapping("/register")
     public ResponseEntity<?> registerUser(@RequestBody CustomerDTO customerDTO, HttpServletRequest request) {
@@ -77,13 +81,26 @@ public String resetPassword(@RequestBody PasswordDTO passwordDTO, HttpServletReq
         }
         return url;
     }
-
+    @GetMapping("/api/hello")
+    public ResponseEntity<?> hello(Authentication authentication) throws CustomError{
+        Authentication authToken = SecurityContextHolder.getContext().getAuthentication();
+        Map<String, Object> attributes;
+        attributes = ((JwtAuthenticationToken) authToken).getTokenAttributes();
+        System.out.println(attributes.get("email"));
+        Customer user = customerRepository.findByEmail((String) attributes.get("email"));
+        if(user== null){
+            throw new CustomError("User not found",HttpStatus.NOT_FOUND);
+        }
+        return new ResponseEntity<>(user.getEmail(), HttpStatus.OK);
+    }
     private String passwordResetTokenMail(User user, String token, String appUrl) {
         String url = appUrl + "/savePassword?id=" + user.getId() + "&token=" + token;
         //send password reset Email
         log.info("Click the link to reset your password: " + url);
         return url;
     }
+
+
 
 
     @PostMapping("/api/savePassword")

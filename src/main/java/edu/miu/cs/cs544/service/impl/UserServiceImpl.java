@@ -4,7 +4,6 @@ import edu.miu.cs.cs544.domain.*;
 import edu.miu.cs.cs544.domain.dto.AddressDTO;
 import edu.miu.cs.cs544.domain.dto.CustomerDTO;
 import edu.miu.cs.cs544.domain.dto.StateDTO;
-import edu.miu.cs.cs544.domain.dto.UserDTO;
 import edu.miu.cs.cs544.repository.CustomerRepository;
 import edu.miu.cs.cs544.repository.PasswordResetTokenRepository;
 import edu.miu.cs.cs544.repository.UserRepository;
