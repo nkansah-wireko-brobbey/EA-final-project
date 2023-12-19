@@ -1,7 +1,9 @@
 package edu.miu.cs.cs544.service.impl;
 
 import edu.miu.cs.cs544.domain.*;
+import edu.miu.cs.cs544.domain.dto.AddressDTO;
 import edu.miu.cs.cs544.domain.dto.CustomerDTO;
+import edu.miu.cs.cs544.domain.dto.StateDTO;
 import edu.miu.cs.cs544.domain.dto.UserDTO;
 import edu.miu.cs.cs544.repository.CustomerRepository;
 import edu.miu.cs.cs544.repository.PasswordResetTokenRepository;
@@ -49,7 +51,6 @@ public class UserServiceImpl implements UserService {
         user.setUserName(customerDTO.getUserName());
         user.setRoleType(RoleType.CLIENT);
         user.setUserPass(passwordEncoder.encode(customerDTO.getUserPass()));
-        user.setEmail(customerDTO.getEmail());
         userRepository.save(user);
 
         Customer customer = getCustomer(customerDTO, user);
@@ -60,17 +61,54 @@ public class UserServiceImpl implements UserService {
     }
 
     private Customer getCustomer(CustomerDTO customerDTO, User user) {
+        Address physicalAddress = mapAddressDTOToEntity(customerDTO.getCustomerPhysicalAddressDTO());
+        Address billingAddress = mapAddressDTOToEntity(customerDTO.getCustomerBillingAddressDTO());
+
         Customer customer = new Customer();
         customer.setFirstName(customerDTO.getFirstName());
         customer.setLastName(customerDTO.getLastName());
         customer.setEmail(customerDTO.getEmail());
-        customer.setCustomerPhysicalAddress(customerDTO.getCustomerPhysicalAddressDTO());
-        customer.setCustomerBillingAddress(customerDTO.getCustomerBillingAddressDTO());
-        customer.setRoleType(RoleType.CLIENT);
+
+        // Set Address entities in Customer
+        customer.setCustomerPhysicalAddress(physicalAddress);
+        customer.setCustomerBillingAddress(billingAddress);
         customer.setAuditData(new AuditData());
         customer.setUser(user);
 
+
         return customer;
+    }
+
+
+    private Address mapAddressDTOToEntity(AddressDTO addressDTO) {
+        if (addressDTO == null) {
+            return null;
+        }
+
+        Address address = new Address();
+        address.setCity(addressDTO.getCity());
+        address.setPostalCode(addressDTO.getPostalCode());
+        address.setLine1(addressDTO.getLine1());
+        address.setLine2(addressDTO.getLine2());
+
+        StateDTO stateDTO = addressDTO.getStateDTO();
+        if (stateDTO != null) {
+            State state = mapStateDTOToEntity(stateDTO);
+            address.setState(state);
+        }
+
+        return address;
+    }
+
+    private State mapStateDTOToEntity(StateDTO stateDTO) {
+        if (stateDTO == null) {
+            return null;
+        }
+
+        State state = new State();
+        state.setName(stateDTO.getName());
+        state.setCode(stateDTO.getCode());
+        return state;
     }
 
     private boolean emailExists(String email) {

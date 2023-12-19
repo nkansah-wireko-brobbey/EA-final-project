@@ -20,7 +20,7 @@ public class Address {
     private String line2;
 
     private String city;
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     private State state;
 
     private String postalCode;
