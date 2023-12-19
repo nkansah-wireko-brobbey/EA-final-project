@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.domain.dto;
 
+import edu.miu.cs.cs544.domain.RoleType;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -35,4 +36,24 @@ public class CustomerDTO {
 
     private UserDTO userDTO;
 
+    private String userPass;
+
+    private  String userName;
+
+    private RoleType roleType;
+
+
+    public CustomerDTO(Integer id, String firstName, String lastName, String email, AuditDataDTO auditDataDTO, AddressDTO addressDTO, AddressDTO addressDTO1, List<ReservationDTO> reservationDTOList, UserDTO userDTO) {
+
+   this.id = id;
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.email = email;
+    this.auditDataDTO = auditDataDTO;
+    this.customerPhysicalAddressDTO = addressDTO;
+    this.customerBillingAddressDTO = addressDTO1;
+    this.reservationDTOList = reservationDTOList;
+    this.userDTO = userDTO;
+
+    }
 }
