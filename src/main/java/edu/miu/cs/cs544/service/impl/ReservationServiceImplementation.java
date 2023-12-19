@@ -1,7 +1,6 @@
 package edu.miu.cs.cs544.service.impl;
 
 import edu.miu.cs.cs544.domain.*;
-import edu.miu.cs.cs544.domain.adapter.ProductAdapter;
 import edu.miu.cs.cs544.domain.adapter.ReservationAdapter;
 import edu.miu.cs.cs544.domain.dto.ReservationDTO;
 import edu.miu.cs.cs544.repository.CustomerRepository;
@@ -14,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
