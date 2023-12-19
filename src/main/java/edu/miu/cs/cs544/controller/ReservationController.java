@@ -1,8 +1,6 @@
 package edu.miu.cs.cs544.controller;
 
 import edu.miu.cs.cs544.domain.CustomError;
-import edu.miu.cs.cs544.domain.ProductType;
-import edu.miu.cs.cs544.domain.ReservationType;
 import edu.miu.cs.cs544.domain.dto.ReservationDTO;
 import edu.miu.cs.cs544.service.ReservationService;
 import jakarta.validation.Valid;
@@ -10,8 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -41,32 +37,8 @@ public class ReservationController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<ReservationDTO> updateReservation(@PathVariable int id, @RequestBody ReservationDTO reservationDTO) {
-        try {
-            ReservationDTO updatedReservation = reservationService.updateReservation(id, reservationDTO);
-            return new ResponseEntity<>(updatedReservation, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-    }
-    @GetMapping("/{productType}")
-    public ResponseEntity<List<ReservationDTO>> getAllReservationsByProductType(@PathVariable String productType) {
-        try {
-            List<ReservationDTO> reservationDTOList = reservationService.getAllReservationByProductType(ProductType.valueOf(productType));
-            return new ResponseEntity<>(reservationDTOList, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
-    }
-
-    @GetMapping("/{reservationType}")
-    public ResponseEntity<List<ReservationDTO>> getAllReservationsByReservationType(@PathVariable String reservationType) {
-        try {
-            List<ReservationDTO> reservationDTOList = reservationService.getAllReservationByReservationType(ReservationType.valueOf(reservationType));
-            return new ResponseEntity<>(reservationDTOList, HttpStatus.OK);
-        } catch (Exception e) {
-            return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-        }
+    public ResponseEntity<?> updateProduct(@PathVariable int id, @Valid @RequestBody ReservationDTO reservationDTO) throws CustomError {
+        return new ResponseEntity<>(reservationService.updateReservation(id, reservationDTO), HttpStatus.OK);
     }
 
     @GetMapping
