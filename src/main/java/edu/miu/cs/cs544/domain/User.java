@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.domain;
 
+import edu.miu.cs.cs544.domain.dto.AuditDataDTO;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -20,21 +21,23 @@ public class User {
 	@Column(length = 60)
 	private String userPass;
 
-    private String firstName;
-
-	private String lastName;
-
-	private String email;
-
 	private Boolean active = false;
-
-	@Embedded
-	private AuditData auditData;
 
 	@Enumerated(EnumType.STRING)
 	private RoleType roleType;
 
+	private String email;
+
+	@Embedded
+	private AuditData auditData;
+
 
 	public User(Integer id, String userName, String userPass, Boolean active, AuditData auditData, RoleType roleType) {
+		this.id = id;
+		this.userName = userName;
+		this.userPass = userPass;
+		this.active = active;
+		this.auditData = auditData;
+		this.roleType = roleType;
 	}
 }

@@ -1,7 +1,9 @@
 package edu.miu.cs.cs544.service.impl;
 
 import edu.miu.cs.cs544.domain.*;
+import edu.miu.cs.cs544.domain.dto.CustomerDTO;
 import edu.miu.cs.cs544.domain.dto.UserDTO;
+import edu.miu.cs.cs544.repository.CustomerRepository;
 import edu.miu.cs.cs544.repository.PasswordResetTokenRepository;
 import edu.miu.cs.cs544.repository.UserRepository;
 import edu.miu.cs.cs544.repository.VerificationTokenRepository;
@@ -16,6 +18,9 @@ import java.util.UUID;
 
 @Service
 public class UserServiceImpl implements UserService {
+
+    @Autowired
+    private CustomerRepository customerRepository;
 
     @Autowired
     private UserRepository userRepository;
@@ -35,21 +40,39 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User registerUser(UserDTO userDTO) throws CustomError {
-        User existingUser = userRepository.findByEmail(userDTO.getEmail());
+    public User registerUser(CustomerDTO customerDTO) throws CustomError {
+        User existingUser = userRepository.findByEmail(customerDTO.getEmail());
         if (existingUser != null) {
-            throw new CustomError("There is an account with that email address: " + userDTO.getEmail());
+            throw new CustomError("There is an account with that email address: " + customerDTO.getEmail());
         }
         User user = new User();
-        user.setUserName(userDTO.getUserName());
-        user.setEmail(userDTO.getEmail());
-        user.setFirstName(userDTO.getFirstName());
-        user.setLastName(userDTO.getLastName());
+        user.setUserName(customerDTO.getUserName());
         user.setRoleType(RoleType.CLIENT);
-        user.setUserPass(passwordEncoder.encode(userDTO.getUserPass()));
+        user.setUserPass(passwordEncoder.encode(customerDTO.getUserPass()));
+        user.setEmail(customerDTO.getEmail());
         userRepository.save(user);
+
+        Customer customer = getCustomer(customerDTO, user);
+
+        // Save the Customer entity
+        customerRepository.save(customer);
         return user;
     }
+
+    private Customer getCustomer(CustomerDTO customerDTO, User user) {
+        Customer customer = new Customer();
+        customer.setFirstName(customerDTO.getFirstName());
+        customer.setLastName(customerDTO.getLastName());
+        customer.setEmail(customerDTO.getEmail());
+        customer.setCustomerPhysicalAddress(customerDTO.getCustomerPhysicalAddressDTO());
+        customer.setCustomerBillingAddress(customerDTO.getCustomerBillingAddressDTO());
+        customer.setRoleType(RoleType.CLIENT);
+        customer.setAuditData(new AuditData());
+        customer.setUser(user);
+
+        return customer;
+    }
+
     private boolean emailExists(String email) {
         return userRepository.findByEmail(email) != null;
     }
@@ -129,5 +152,17 @@ public class UserServiceImpl implements UserService {
         return passwordEncoder.matches(oldPassword,user.getUserPass());
     }
 
+    @Override
+    public void deleteUser(Integer id) throws CustomError {
+        User user = userRepository.findById(id).orElse(null);
+        if (user == null) {
+            throw new CustomError("User not found");
+        }
+        userRepository.delete(user);
+    }
 
+    @Override
+    public void updateUserDetails(User user) throws CustomError {
+            userRepository.save(user);
+        }
 }

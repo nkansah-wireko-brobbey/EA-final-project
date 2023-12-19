@@ -2,30 +2,22 @@ package edu.miu.cs.cs544.controller;
 
 
 import edu.miu.cs.cs544.domain.CustomError;
-import edu.miu.cs.cs544.domain.RoleType;
 import edu.miu.cs.cs544.domain.User;
+import edu.miu.cs.cs544.domain.dto.CustomerDTO;
 import edu.miu.cs.cs544.domain.dto.PasswordDTO;
-import edu.miu.cs.cs544.domain.dto.UserDTO;
 import edu.miu.cs.cs544.domain.VerificationToken;
+import edu.miu.cs.cs544.domain.dto.UserUpdateDTO;
 import edu.miu.cs.cs544.event.RegistrationCompleteEvent;
 import edu.miu.cs.cs544.service.UserService;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.actuate.web.exchanges.HttpExchange;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
-import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.oauth2.client.authentication.OAuth2AuthenticationToken;
-import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
-import org.springframework.security.oauth2.core.user.OAuth2User;
-import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
 
-import java.security.Principal;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -42,66 +34,14 @@ public class UserRegistrationController {
 
     @GetMapping("/api/userinfo")
     public ResponseEntity<?> getUserInfo(Authentication authentication) {
-        Authentication authToken = SecurityContextHolder.getContext().getAuthentication();
-        Map<String, Object> attributes;
-
-        if (authentication != null && authentication.getPrincipal() instanceof OAuth2AuthenticatedPrincipal oauth2User) {
-            String email = oauth2User.getAttribute("email");
-            try {
-                User user = userService.findUserByEmail(email);
-                if (user == null) {
-                    UserDTO userDTO = new UserDTO();
-                    userDTO.setEmail(email);
-                    userDTO.setUserName(oauth2User.getAttribute("name"));
-                    userDTO.setFirstName(oauth2User.getAttribute("given_name"));
-                    userDTO.setLastName(oauth2User.getAttribute("family_name"));
-                    userDTO.setUserPass(UUID.randomUUID().toString());
-                    userDTO.setRoleType(RoleType.CLIENT);
-                    userService.registerUser(userDTO);
-
-                    return new ResponseEntity<>("Hi"+oauth2User.getAttribute("name")+"You are now registered to the reservation system: ", HttpStatus.OK);
-
-                }
-            }
-            catch (CustomError e) {
-                return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-            }
-            return new ResponseEntity<>("Hi"+oauth2User.getAttribute("name")+"Welcome Back : ", HttpStatus.OK);
-        } else if (authToken instanceof JwtAuthenticationToken) {
-            attributes = ((JwtAuthenticationToken) authToken).getTokenAttributes();
-            User user = userService.findUserByEmail((String) attributes.get("email"));
-            if (user == null) {
-                UserDTO userDTO = new UserDTO();
-                userDTO.setEmail((String) attributes.get("email"));
-                userDTO.setUserName((String) attributes.get("name"));
-                userDTO.setFirstName((String) attributes.get("given_name"));
-                userDTO.setLastName((String) attributes.get("family_name"));
-                userDTO.setUserPass(UUID.randomUUID().toString());
-                userDTO.setRoleType(RoleType.CLIENT);
-                try {
-                    userService.registerUser(userDTO);
-                }
-                catch (CustomError e) {
-                    return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-                }
-                return new ResponseEntity<>("Hi"+attributes.get("name")+"You are now registered to the reservation system: ", HttpStatus.OK);
-
-            }
-            return new ResponseEntity<>("Hi"+attributes.get("name")+"Welcome Back : ", HttpStatus.OK);
-
-        } else {
-        return new ResponseEntity<>("User not authenticated or principal is not an OAuth2User", HttpStatus.OK);
+        return new ResponseEntity<>("hi"+userService.findUserByEmail(authentication.getName()), HttpStatus.BAD_REQUEST);
     }
-    }
-    @GetMapping("/api/hello")
-    public String hello(Principal principal) {
-        return "Hello " +principal.getName()+", Welcome to Daily Code Buffer!!";
-    }
+
     @PostMapping("/register")
-    public ResponseEntity<?> registerUser(@RequestBody UserDTO userDTO, HttpServletRequest request) {
+    public ResponseEntity<?> registerUser(@RequestBody CustomerDTO customerDTO, HttpServletRequest request) {
 
         try {
-            User user = userService.registerUser(userDTO);
+            User user = userService.registerUser(customerDTO);
             eventPublisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
         }
         catch (CustomError e){
@@ -109,29 +49,6 @@ public class UserRegistrationController {
         }
         return new ResponseEntity<>("Successfully Registered, check your email to verify your account", HttpStatus.OK);
     }
-
-
-    @PostMapping("/api/register-or-login")
-    public ResponseEntity<?> registerOrLoginUser(@RequestBody UserDTO userDTO, HttpServletRequest request) {
-        try {
-            // Check if the user exists in the database
-            User existingUser = userService.findUserByEmail(userDTO.getEmail());
-
-            if (existingUser != null) {
-                // User exists, proceed with login
-                // You can add additional checks like verifying the password
-                return new ResponseEntity<>("Successfully Logged In", HttpStatus.OK);
-            } else {
-                // User does not exist, proceed with registration
-                User newUser = userService.registerUser(userDTO);
-                eventPublisher.publishEvent(new RegistrationCompleteEvent(newUser, applicationUrl(request)));
-                return new ResponseEntity<>("Successfully Registered, check your email to verify your account", HttpStatus.OK);
-            }
-        } catch (CustomError e) {
-            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
-        }
-    }
-
     @GetMapping("/registrationConfirm")
     public ResponseEntity<?> confirmRegistration(@RequestParam("token") String token) {
         String result = userService.validateVerificationToken(token);
@@ -205,5 +122,42 @@ public String resetPassword(@RequestBody PasswordDTO passwordDTO, HttpServletReq
 
     private String applicationUrl(HttpServletRequest request) {
         return "http://" + request.getServerName() + ":" + request.getServerPort() + request.getContextPath();
+    }
+
+    @DeleteMapping("/api/deleteUser")
+    public ResponseEntity<?> deleteUser(Authentication authentication) {
+        try {
+            User user = userService.findUserByEmail(authentication.getName());
+            if (user != null) {
+                userService.deleteUser(user.getId());
+                return new ResponseEntity<>("User deleted successfully", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            }
+        } catch (CustomError e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @PutMapping("/api/updateUser")
+    public ResponseEntity<?> updateUser(@RequestBody UserUpdateDTO userUpdateDTO, Authentication authentication) {
+        try {
+            User user = userService.findUserByEmail(authentication.getName());
+            if (user != null) {
+                // Update user details based on the fields available in userUpdateDTO
+                if (userUpdateDTO.getName() != null) {
+                    user.setUserName(userUpdateDTO.getName());
+                }
+                if (userUpdateDTO.getEmail() != null) {
+                    user.setEmail(userUpdateDTO.getEmail());
+                }
+                userService.updateUserDetails(user);
+                return new ResponseEntity<>("User updated successfully", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("User not found", HttpStatus.NOT_FOUND);
+            }
+        } catch (CustomError e) {
+            return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
+        }
     }
 }

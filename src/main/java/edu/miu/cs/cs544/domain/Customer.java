@@ -37,5 +37,25 @@ public class Customer {
 
 	@OneToOne(cascade = CascadeType.ALL)
 	private User user;
-	
+
+	private String userName;
+
+	@Column(length = 60)
+	private String userPass;
+
+	@Enumerated(EnumType.STRING)
+	private RoleType roleType;
+
+	public Customer(Integer id, String firstName, String lastName, String email, AuditData auditData, Address address, Address address1, List<Reservation> reservationList, User user) {
+	this.id = id;
+	this.firstName = firstName;
+	this.lastName = lastName;
+	this.email = email;
+	this.auditData = auditData;
+	this.customerPhysicalAddress = address;
+	this.customerBillingAddress = address1;
+	this.reservationList = reservationList;
+	this.user = user;
+
+	}
 }

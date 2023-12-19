@@ -1,16 +1,18 @@
 package edu.miu.cs.cs544.service;
 
 import edu.miu.cs.cs544.domain.CustomError;
+import edu.miu.cs.cs544.domain.dto.CustomerDTO;
 import edu.miu.cs.cs544.domain.dto.UserDTO;
 import edu.miu.cs.cs544.domain.User;
 import edu.miu.cs.cs544.domain.VerificationToken;
+import edu.miu.cs.cs544.domain.dto.UserUpdateDTO;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
 
 @Service
 public interface UserService {
-    User registerUser(UserDTO userDTO) throws CustomError;
+    User registerUser(CustomerDTO customerDTO) throws CustomError;
 
     void createVerificationToken(User user, String token);
 
@@ -29,4 +31,10 @@ public interface UserService {
     void changeUserPassword(User user, String password);
 
     boolean checkIfValidOldPassword(User user, String oldPassword);
+
+   public void deleteUser(Integer id) throws CustomError;
+
+    public void updateUserDetails(User user) throws CustomError;
+
+
 }
