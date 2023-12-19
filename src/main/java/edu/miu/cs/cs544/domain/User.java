@@ -27,4 +27,14 @@ public class User {
     @Enumerated(EnumType.STRING)
     private RoleType roleType;
 
+    private String email;
+
+    public User(Integer id, String userName, String userPass, Boolean active, AuditData auditData, RoleType roleType) {
+        this.id = id;
+        this.userName = userName;
+        this.userPass = userPass;
+        this.active = active;
+        this.auditData = auditData;
+        this.roleType = roleType;
+    }
 }
