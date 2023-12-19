@@ -11,26 +11,25 @@ spring:
     properties:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
+
   security:
     oauth2:
       client:
         registration:
           api-client-oidc:
-            provider: spring
-            client-id: api-client
-            client-secret: secret
-            authorization-grant-type: authorization_code
-            redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/{registrationId}"
-            scope: openid
-            client-name: api-client-oidc
-          api-client-authorization-code:
-            provider: spring
-            client-id: api-client
-            client-secret: secret
-            authorization-grant-type: authorization_code
-            redirect-uri: "http://127.0.0.1:8080/authorized"
-            scope: api.read
-            client-name: api-client-authorization-code
+              provider: google
+              client-id: 754317980356-5kha3jmphg9tm7oirmn7pac4fbauj85o.apps.googleusercontent.com
+              client-secret: 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
+              authorization-grant-type: authorization_code
+              redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/{registrationId}"
+              scope:
+                - openid
+                - profile
+                - email
+              client-name: api-client-oidc
         provider:
-          spring:
-            issuer-uri: http://localhost:9000
+            google:
+              issuer-uri: https://accounts.google.com
+              user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+              authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+              token-uri: https://www.googleapis.com/oauth2/v4/token

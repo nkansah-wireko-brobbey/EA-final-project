@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private UserRepository userRepository;
 
-    @Autowired
+
     private PasswordEncoder passwordEncoder;
 
     @Autowired
@@ -29,12 +29,16 @@ public class UserServiceImpl implements UserService {
     @Autowired
     private PasswordResetTokenRepository passwordResetTokenRepository;
 
+    @Autowired
+    public void setPasswordEncoder(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
-    public User registerUser(UserDTO userDTO)  throws CustomError {
-        if (emailExists(userDTO.getEmail())) {
-            throw new CustomError("There is an account with that email address: "
-                    + userDTO.getEmail());
+    public User registerUser(UserDTO userDTO) throws CustomError {
+        User existingUser = userRepository.findByEmail(userDTO.getEmail());
+        if (existingUser != null) {
+            throw new CustomError("There is an account with that email address: " + userDTO.getEmail());
         }
         User user = new User();
         user.setUserName(userDTO.getUserName());
