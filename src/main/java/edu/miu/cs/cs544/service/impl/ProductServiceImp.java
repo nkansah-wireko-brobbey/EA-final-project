@@ -6,12 +6,15 @@ import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import edu.miu.cs.cs544.domain.adapter.ProductAdapter;
 import edu.miu.cs.cs544.repository.ProductRepository;
 import edu.miu.cs.cs544.service.ProductService;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 
 @Service
+@Transactional
 public class ProductServiceImp implements ProductService {
     @Autowired
     private ProductRepository productRepository;
@@ -46,6 +49,7 @@ public class ProductServiceImp implements ProductService {
     public List<ProductDTO> getAllProducts() {
         return productRepository.findAll().stream().map(ProductAdapter::getProductDTO).toList();
     }
+
     public List<ProductDTO> getAllAvailableProducts() {
         return productRepository.findAll().stream().filter(Product::getIsAvailable).map(ProductAdapter::getProductDTO).toList();
     }

@@ -11,27 +11,27 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Product {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	
-	private String name; 
-	
-	private String description;
-	
-	private String excerpt;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	@Enumerated(EnumType.STRING)
-	private ProductType type;
+    private String name;
 
-	private double nightlyRate;
+    private String description;
 
-	private int maxCapacity;
+    private String excerpt;
 
-	private Boolean isAvailable;
+    @Enumerated(EnumType.STRING)
+    private ProductType type;
 
-	@Embedded
-	private AuditData auditData;
+    private double nightlyRate;
 
-	
+    private int maxCapacity;
+
+    private Boolean isAvailable;
+
+    @Embedded
+    private AuditData auditData;
+
+
 }

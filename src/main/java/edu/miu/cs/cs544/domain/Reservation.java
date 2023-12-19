@@ -14,20 +14,20 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Reservation {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	private Customer customer;
+    @ManyToOne(fetch = FetchType.LAZY)
+    private Customer customer;
 
-	@OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-	private List<Item> items = new ArrayList<>();
+    @OneToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    private List<Item> items = new ArrayList<>();
 
-	@Embedded
-	private AuditData auditData;
+    @Embedded
+    private AuditData auditData;
 
-	@Enumerated(EnumType.STRING)
-	private ReservationType reservationType;
-	
+    @Enumerated(EnumType.STRING)
+    private ReservationType reservationType;
+
 }

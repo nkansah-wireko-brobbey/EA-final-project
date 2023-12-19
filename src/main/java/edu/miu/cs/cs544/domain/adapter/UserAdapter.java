@@ -4,7 +4,7 @@ import edu.miu.cs.cs544.domain.User;
 import edu.miu.cs.cs544.domain.dto.UserDTO;
 
 public class UserAdapter {
-    public static UserDTO getUserDTO(User user){
+    public static UserDTO getUserDTO(User user) {
         return new UserDTO(
                 user.getId(),
                 user.getUserName(),
@@ -15,7 +15,7 @@ public class UserAdapter {
         );
     }
 
-    public static User getUser(UserDTO userDTO){
+    public static User getUser(UserDTO userDTO) {
         return new User(
                 userDTO.getId(),
                 userDTO.getUserName(),

@@ -14,48 +14,28 @@ import java.util.List;
 @Entity
 public class Customer {
 
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer id;
-	
-	private String firstName;
-	
-	private String lastName;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer id;
 
-	private String email;
-	
-	private AuditData auditData;
+    private String firstName;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	private Address customerPhysicalAddress;
+    private String lastName;
 
-	@ManyToOne(cascade = CascadeType.ALL)
-	private Address customerBillingAddress;
+    private String email;
 
-	@OneToMany(mappedBy = "customer")
-	private List<Reservation> reservationList = new ArrayList<>();
+    private AuditData auditData;
 
-	@OneToOne(cascade = CascadeType.ALL)
-	private User user;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Address customerPhysicalAddress;
 
-	private String userName;
+    @ManyToOne(cascade = CascadeType.ALL)
+    private Address customerBillingAddress;
 
-	@Column(length = 60)
-	private String userPass;
+    @OneToMany(mappedBy = "customer")
+    private List<Reservation> reservationList = new ArrayList<>();
 
-	@Enumerated(EnumType.STRING)
-	private RoleType roleType;
+    @OneToOne(cascade = CascadeType.ALL)
+    private User user;
 
-	public Customer(Integer id, String firstName, String lastName, String email, AuditData auditData, Address address, Address address1, List<Reservation> reservationList, User user) {
-	this.id = id;
-	this.firstName = firstName;
-	this.lastName = lastName;
-	this.email = email;
-	this.auditData = auditData;
-	this.customerPhysicalAddress = address;
-	this.customerBillingAddress = address1;
-	this.reservationList = reservationList;
-	this.user = user;
-
-	}
 }
