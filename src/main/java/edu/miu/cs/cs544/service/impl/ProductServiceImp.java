@@ -1,9 +1,12 @@
 package edu.miu.cs.cs544.service.impl;
 
+import edu.miu.cs.cs544.domain.AuditData;
 import edu.miu.cs.cs544.domain.CustomError;
+import edu.miu.cs.cs544.domain.Customer;
 import edu.miu.cs.cs544.domain.Product;
 import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import edu.miu.cs.cs544.domain.adapter.ProductAdapter;
+import edu.miu.cs.cs544.repository.CustomerRepository;
 import edu.miu.cs.cs544.repository.ProductRepository;
 import edu.miu.cs.cs544.service.ProductService;
 import jakarta.transaction.Transactional;
@@ -11,6 +14,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -19,9 +23,19 @@ public class ProductServiceImp implements ProductService {
     @Autowired
     private ProductRepository productRepository;
 
+    @Autowired
+    private CustomerRepository customerRepository;
+
     @Override
-    public ProductDTO addProduct(ProductDTO productDTO) {
+    public ProductDTO addProduct(ProductDTO productDTO, String email) {
         productDTO.setIsAvailable(true); //set the product to be available by default
+        Customer customer = customerRepository.findByEmail(email);
+        AuditData auditData = new AuditData();
+        auditData.setCreatedBy(customer.getEmail());
+        auditData.setUpdatedOn(LocalDateTime.now());
+        auditData.setCreatedOn(LocalDateTime.now());
+        auditData.setUpdatedBy(customer.getEmail());
+        productDTO.setAuditData(auditData);
         return ProductAdapter.getProductDTO(productRepository.save(ProductAdapter.getProduct(productDTO)));
     }
 

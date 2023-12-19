@@ -10,6 +10,7 @@ import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 
 import java.time.LocalDate;
 import java.util.ArrayList;
@@ -18,6 +19,7 @@ import java.util.List;
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 
+@ExtendWith(RetryExtension.class)
 public class ReservationRestTest {
 
     @BeforeAll

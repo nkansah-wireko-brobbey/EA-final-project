@@ -1,11 +1,13 @@
 package edu.miu.cs.cs544.service.impl;
 
+import edu.miu.cs.cs544.cs544.RetryExtension;
 import edu.miu.cs.cs544.domain.*;
 import edu.miu.cs.cs544.domain.adapter.ProductAdapter;
 import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import edu.miu.cs.cs544.repository.ProductRepository;
 import edu.miu.cs.cs544.service.ProductService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,6 +23,7 @@ import java.util.Optional;
 import static org.junit.jupiter.api.Assertions.*;
 
 @RunWith(SpringRunner.class)
+@ExtendWith(RetryExtension.class)
 @SpringBootTest
 class ProductServiceImpTest {
 

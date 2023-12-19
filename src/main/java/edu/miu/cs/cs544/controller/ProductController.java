@@ -7,7 +7,12 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api")
@@ -17,7 +22,10 @@ public class ProductController {
 
     @PostMapping("/products")
     public ResponseEntity<?> addProduct(@Valid @RequestBody ProductDTO productDTO) {
-        return new ResponseEntity<>(productService.addProduct(productDTO), HttpStatus.CREATED);
+        Authentication authToken = SecurityContextHolder.getContext().getAuthentication();
+        Map<String, Object> attributes;
+        attributes = ((JwtAuthenticationToken) authToken).getTokenAttributes();;
+        return new ResponseEntity<>(productService.addProduct(productDTO,(String)attributes.get("email")), HttpStatus.CREATED);
     }
 
 

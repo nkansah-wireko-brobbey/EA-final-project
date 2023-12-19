@@ -6,7 +6,7 @@ import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import java.util.List;
 
 public interface ProductService {
-    ProductDTO addProduct(ProductDTO productDTO);
+    ProductDTO addProduct(ProductDTO productDTO, String email);
 
     ProductDTO updateProduct(int id, ProductDTO productDTO) throws CustomError;
 
