@@ -3,9 +3,6 @@ spring:
     url: jdbc:mysql://localhost:3306/final_project_ea?useSSL=false&serverTimezone=UTC
     username: root
     password: root12345
-#    url: jdbc:mysql://eafinalproject.mysql.database.azure.com:3306/final_project_ea
-#    username: azure_root
-#    password: Root12345
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -15,3 +12,24 @@ spring:
       hibernate:
         dialect: org.hibernate.dialect.MySQL8Dialect
 
+  security:
+    oauth2:
+      client:
+        registration:
+          api-client-oidc:
+              provider: google
+              client-id: 754317980356-5kha3jmphg9tm7oirmn7pac4fbauj85o.apps.googleusercontent.com
+              client-secret: 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
+              authorization-grant-type: authorization_code
+              redirect-uri: "http://127.0.0.1:8080/login/oauth2/code/{registrationId}"
+              scope:
+                - openid
+                - profile
+                - email
+              client-name: api-client-oidc
+        provider:
+            google:
+              issuer-uri: https://accounts.google.com
+              user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
+              authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
+              token-uri: https://www.googleapis.com/oauth2/v4/token
