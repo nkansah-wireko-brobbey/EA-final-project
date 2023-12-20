@@ -52,9 +52,12 @@ public class ProductController {
 
     private String getEmailFromAuthentication(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
-        Map<String, Object> attributes = jwtAuthenticationToken.getTokenAttributes();
-        return (String)attributes.get("email");
+        if(authentication ==null) {
+            JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
+            Map<String, Object> attributes = jwtAuthenticationToken.getTokenAttributes();
+            return (String) attributes.get("email");
+        }
+        return null;
     }
 
 
