@@ -1,10 +1,8 @@
 package edu.miu.cs.cs544.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import edu.miu.cs.cs544.domain.Customer;
 import edu.miu.cs.cs544.domain.ProductType;
 import edu.miu.cs.cs544.domain.dto.ProductDTO;
-import edu.miu.cs.cs544.repository.CustomerRepository;
 import edu.miu.cs.cs544.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -13,7 +11,6 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
@@ -39,7 +36,7 @@ class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
         //verify
-        Mockito.verify(productService, Mockito.times(1)).addProduct(productDTO, null);
+        Mockito.verify(productService, Mockito.times(1)).addProduct(productDTO);
     }
 
     @Test
@@ -52,7 +49,7 @@ class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         // Verify
-        Mockito.verify(productService, Mockito.times(1)).updateProduct(2, productDTO,null);
+        Mockito.verify(productService, Mockito.times(1)).updateProduct(2, productDTO);
     }
 
     @Test

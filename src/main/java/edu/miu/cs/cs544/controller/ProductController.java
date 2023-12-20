@@ -22,13 +22,13 @@ public class ProductController {
 
     @PostMapping("/products")
     public ResponseEntity<?> addProduct(@Valid @RequestBody ProductDTO productDTO) throws CustomError {
-        return new ResponseEntity<>(productService.addProduct(productDTO,getEmailFromAuthentication()), HttpStatus.CREATED);
+        return new ResponseEntity<>(productService.addProduct(productDTO), HttpStatus.CREATED);
     }
 
 
     @PutMapping("/products/{id}")
     public ResponseEntity<?> updateProduct(@PathVariable int id, @Valid @RequestBody ProductDTO productDTO) throws CustomError {
-        return new ResponseEntity<>(productService.updateProduct(id, productDTO,getEmailFromAuthentication()), HttpStatus.OK);
+        return new ResponseEntity<>(productService.updateProduct(id, productDTO), HttpStatus.OK);
     }
 
 
