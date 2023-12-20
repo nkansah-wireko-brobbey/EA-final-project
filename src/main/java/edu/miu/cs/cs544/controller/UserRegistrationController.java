@@ -55,10 +55,10 @@ public class UserRegistrationController {
         return new ResponseEntity<>("Successfully Registered, check your email to verify your account", HttpStatus.OK);
     }
     @PostMapping("/api/register")
-    public ResponseEntity<?> registerAdmin(@RequestBody UserDTO userDTO, HttpServletRequest request) {
+    public ResponseEntity<?> registerAdmin(@RequestBody UserDTO userDTO, HttpServletRequest request, Authentication authentication){
 
         try {
-            User user = userService.registerAdmin(userDTO);
+            User user = userService.registerAdmin(userDTO,getEmailFromAuthentication(authentication));
             eventPublisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
         }
         catch (CustomError e){

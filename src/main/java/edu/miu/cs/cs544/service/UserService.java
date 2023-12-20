@@ -14,7 +14,7 @@ import java.util.Optional;
 public interface UserService {
     User registerUser(CustomerDTO customerDTO) throws CustomError;
 
-    User registerAdmin(UserDTO userDTO) throws CustomError;
+    User registerAdmin(UserDTO userDTO, String email) throws CustomError;
 
     void createVerificationToken(User user, String token);
 

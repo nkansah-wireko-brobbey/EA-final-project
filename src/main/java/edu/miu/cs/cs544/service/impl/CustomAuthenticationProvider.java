@@ -1,5 +1,9 @@
 package edu.miu.cs.cs544.service.impl;
 
+import edu.miu.cs.cs544.domain.User;
+import edu.miu.cs.cs544.domain.VerificationToken;
+import edu.miu.cs.cs544.repository.UserRepository;
+import edu.miu.cs.cs544.repository.VerificationTokenRepository;
 import io.jsonwebtoken.security.Keys;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
@@ -21,6 +25,9 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     @Autowired
     private CustomUserDetailsService customUserDetailsService;
+
+    @Autowired
+    private VerificationTokenRepository verificationToken;
 
     @Autowired
     private PasswordEncoder passwordEncoder;
@@ -47,12 +54,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private Authentication checkPassword(UserDetails user, String rawPassword) {
         if(passwordEncoder.matches(rawPassword, user.getPassword())) {
-
-            System.out.println(generateJwtToken(user));
-
-            System.out.println(new UsernamePasswordAuthenticationToken(user.getUsername(),
-                    user.getPassword(),
-                    user.getAuthorities()));
+            verificationToken.save(new VerificationToken(user.getUsername(), generateJwtToken(user)));
             return new UsernamePasswordAuthenticationToken(user.getUsername(),
                     user.getPassword(),
                     user.getAuthorities());

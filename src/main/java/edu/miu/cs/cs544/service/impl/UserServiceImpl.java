@@ -11,6 +11,7 @@ import edu.miu.cs.cs544.repository.UserRepository;
 import edu.miu.cs.cs544.repository.VerificationTokenRepository;
 import edu.miu.cs.cs544.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -61,20 +62,26 @@ public class UserServiceImpl implements UserService {
         return user;
     }}
     @Override
-    public User registerAdmin(UserDTO userDTO) throws CustomError {
+    public User registerAdmin(UserDTO userDTO, String email) throws CustomError {
 
-        if ( emailExists(userDTO.getEmail()) ) {
-            throw new CustomError("There is an account with that email address: " + userDTO.getEmail()+"If you forgot your password click on reset link");
-        }else {
-            User user = new User();
-            user.setUserName(userDTO.getUserName());
-            user.setEmail(userDTO.getEmail());
-            user.setRoleType(RoleType.ADMIN);
-            user.setUserPass(passwordEncoder.encode(userDTO.getUserPass()));
-            userRepository.save(user);
+        if (isAdminUser(email)) {
+            if (emailExists(userDTO.getEmail())) {
+                throw new CustomError("Please enter a valid email address", HttpStatus.BAD_REQUEST);
+            } else {
+                User user = new User();
+                user.setUserName(userDTO.getUserName());
+                user.setEmail(userDTO.getEmail());
+                user.setRoleType(RoleType.ADMIN);
+                user.setUserPass(passwordEncoder.encode(userDTO.getUserPass()));
+                userRepository.save(user);
 
-            return user;
-        }}
+                return user;
+            }
+        }
+    else{
+            throw new CustomError("You are not authorized to perform this action", HttpStatus.UNAUTHORIZED);
+        }
+        }
 
     private Customer getCustomer(CustomerDTO customerDTO, User user) {
         Address physicalAddress = mapAddressDTOToEntity(customerDTO.getCustomerPhysicalAddressDTO());
@@ -143,6 +150,11 @@ public class UserServiceImpl implements UserService {
 
     private boolean emailExists(String email) {
         return customerRepository.findByEmail(email) != null;
+    }
+
+    public boolean isAdminUser(String email) {
+        User user = userRepository.findByEmail(email);
+        return user != null && user.getRoleType() == RoleType.ADMIN;
     }
 
     @Override
