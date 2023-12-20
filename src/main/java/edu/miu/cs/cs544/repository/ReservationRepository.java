@@ -9,6 +9,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Optional;
 
 public interface ReservationRepository extends JpaRepository<Reservation, Integer> {
@@ -19,4 +20,6 @@ public interface ReservationRepository extends JpaRepository<Reservation, Intege
     Collection<Object> findAllProduct_ProductType(@Param("productType")ProductType productType);
 
     Optional<Reservation> findReservationByIdAndCustomer(int id, Customer customer);
+
+    List<Reservation> findReservationsByCustomer(Customer customer);
 }
