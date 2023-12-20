@@ -7,7 +7,12 @@ import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/reservations")
@@ -22,7 +27,7 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<?> createReservation(@Valid @RequestBody ReservationDTO reservationDTO) throws CustomError {
-        return new ResponseEntity<>(reservationService.createReservation(reservationDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(reservationService.createReservation(reservationDTO, getEmailFromAuthentication()), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -44,5 +49,12 @@ public class ReservationController {
     @GetMapping
     public ResponseEntity<?> getAllReservations() throws CustomError {
         return new ResponseEntity<>(reservationService.getAllReservation(), HttpStatus.OK);
+    }
+
+    private String getEmailFromAuthentication(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
+        Map<String, Object> attributes = jwtAuthenticationToken.getTokenAttributes();
+        return (String)attributes.get("email");
     }
 }
