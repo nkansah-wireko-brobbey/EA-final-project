@@ -73,10 +73,4 @@ public class ReservationController {
         return new ResponseEntity<>(reservationService.getAllReservation(), HttpStatus.OK);
     }
 
-    private String getEmailFromAuthentication(){
-        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
-        Map<String, Object> attributes = jwtAuthenticationToken.getTokenAttributes();
-        return (String)attributes.get("email");
-    }
 }

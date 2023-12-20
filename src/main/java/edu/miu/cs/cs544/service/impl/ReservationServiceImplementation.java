@@ -11,10 +11,14 @@ import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationToken;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -43,9 +47,10 @@ public class ReservationServiceImplementation implements ReservationService {
 
     @Override
     @Transactional
-   public ReservationDTO createReservation(ReservationDTO reservationDTO) throws CustomError {
-       /*  Customer customer = customerRepository.findByEmail(email);
-        if (customer==null) {
+    public ReservationDTO createReservation(ReservationDTO reservationDTO) throws CustomError {
+        String email = getEmailFromAuthentication();
+        Customer customer = customerRepository.findByEmail(email);
+        if (customer == null) {
             throw new CustomError(email + " is not valid", HttpStatus.NOT_FOUND);
         }
         Reservation reservation = ReservationAdapter.getReservation(reservationDTO);
@@ -65,8 +70,7 @@ public class ReservationServiceImplementation implements ReservationService {
 
         }
 
-        return ReservationAdapter.getReservationDTO(reservationRepository.save(reservation));*/
-        return null;
+        return ReservationAdapter.getReservationDTO(reservationRepository.save(reservation));
     }
 
     @Override
@@ -170,6 +174,7 @@ public class ReservationServiceImplementation implements ReservationService {
         return reservationDTOList;
 
     }
+
     private AuditData getAuditData(String email) {
         AuditData auditData = new AuditData();
         auditData.setCreatedBy(email);
@@ -177,6 +182,12 @@ public class ReservationServiceImplementation implements ReservationService {
         auditData.setCreatedOn(LocalDateTime.now());
         auditData.setUpdatedBy(email);
         return auditData;
+    }
+    private String getEmailFromAuthentication(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
+        Map<String, Object> attributes = jwtAuthenticationToken.getTokenAttributes();
+        return (String)attributes.get("email");
     }
 
 
