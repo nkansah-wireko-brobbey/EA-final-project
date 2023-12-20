@@ -75,7 +75,7 @@ class ReservationServiceImplementationTest {
         Reservation reservation = new Reservation(1,customer, itemList, null, ReservationType.NEW);
         Mockito.when(customerRepository.findByEmail("john@gmail.com")).thenReturn(customer);
         Mockito.when(reservationRepository.save(reservation)).thenReturn(reservation);
-        reservationService.createReservation(ReservationAdapter.getReservationDTO(reservation), customer.getEmail());
+        reservationService.createReservation(ReservationAdapter.getReservationDTO(reservation));
         Mockito.verify(reservationRepository, Mockito.times(1)).save(reservation);
 
     }

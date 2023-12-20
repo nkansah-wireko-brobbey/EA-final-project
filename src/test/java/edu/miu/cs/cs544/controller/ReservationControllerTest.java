@@ -1,6 +1,7 @@
 package edu.miu.cs.cs544.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.miu.cs.cs544.cs544.RetryExtension;
 import edu.miu.cs.cs544.domain.ProductType;
 import edu.miu.cs.cs544.domain.ReservationType;
 import edu.miu.cs.cs544.domain.adapter.ReservationAdapter;
@@ -10,6 +11,7 @@ import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import edu.miu.cs.cs544.domain.dto.ReservationDTO;
 import edu.miu.cs.cs544.service.ReservationService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -34,6 +36,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ExtendWith(RetryExtension.class)
 class ReservationControllerTest {
 
     @MockBean
@@ -43,7 +46,6 @@ class ReservationControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @WithMockUser(username = "testUser", roles = "USER")
     public void createReservation() throws Exception {
         double nightlyRate = 100;
         ProductDTO productDTO = new ProductDTO(2, "Test Product", "Test Product", "This is a test product", ProductType.Room, nightlyRate, 2, true, null);
@@ -55,18 +57,16 @@ class ReservationControllerTest {
                         .content(new ObjectMapper().writeValueAsString(reservationDTO))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
-        Mockito.verify(reservationService, Mockito.times(1)).createReservation(reservationDTO, "jonny@gmail.com");
+        Mockito.verify(reservationService, Mockito.times(1)).createReservation(reservationDTO);
     }
 
     @Test
-    @WithMockUser(username = "testname", roles = "Client")
     public void deleteReservation() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations/1")).andExpect(status().isOk());
         Mockito.verify(reservationService, Mockito.times(1)).deleteReservation(1);
     }
 
     @Test
-    @WithMockUser(username = "testname", roles = "Client")
     public void getReservationTest() throws Exception {
     ReservationDTO reservationDTO = createDummyReservationDTO(1);
     Integer reservationId = ReservationAdapter.getReservation(reservationDTO).getId();
@@ -80,7 +80,6 @@ class ReservationControllerTest {
 
     }
     @Test
-    @WithMockUser(username = "testname", roles = "Client")
     public void getAllReservationTest() throws Exception {
     ReservationDTO reservationDTO = createDummyReservationDTO(1);
     ReservationDTO reservationDTO2 = createDummyReservationDTO(2);

@@ -1,10 +1,12 @@
 package edu.miu.cs.cs544.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.miu.cs.cs544.cs544.RetryExtension;
 import edu.miu.cs.cs544.domain.ProductType;
 import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import edu.miu.cs.cs544.service.ProductService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -20,6 +22,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @AutoConfigureMockMvc
 @SpringBootTest
+@ExtendWith(RetryExtension.class)
 class ProductControllerTest {
     @Autowired
     private MockMvc mockMvc;
