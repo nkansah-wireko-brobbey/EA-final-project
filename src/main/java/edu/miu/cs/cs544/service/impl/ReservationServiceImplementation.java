@@ -53,6 +53,7 @@ public class ReservationServiceImplementation implements ReservationService {
     public ReservationDTO createReservation(ReservationDTO reservationDTO) throws CustomError {
         String email = getEmailFromAuthentication();
         Customer customer = customerRepository.findByEmail(email);
+        System.out.println(customer);
         if (customer == null) {
             throw new CustomError(email + " is not valid", HttpStatus.NOT_FOUND);
         }
@@ -61,6 +62,7 @@ public class ReservationServiceImplementation implements ReservationService {
         reservation.setAuditData(getAuditData(email));
 
         List<Item> itemList = reservation.getItems();
+        System.out.println(reservation);
         for (Item item : itemList) {
             Optional<Product> availableItem = productRepository.findById(item.getProduct().getId());
             if (availableItem.isPresent()) {
@@ -213,10 +215,11 @@ public class ReservationServiceImplementation implements ReservationService {
     }
     private String getEmailFromAuthentication(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
-        Map<String, Object> attributes = jwtAuthenticationToken.getTokenAttributes();
-        return (String)attributes.get("email");
+        if(authentication!=null) {
+            JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
+            Map<String, Object> attributes = jwtAuthenticationToken.getTokenAttributes();
+            return (String) attributes.get("email");
+        }
+        return null;
     }
-
-
 }
