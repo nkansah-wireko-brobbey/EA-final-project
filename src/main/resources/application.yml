@@ -2,7 +2,10 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/final_project_ea?useSSL=false&serverTimezone=UTC
     username: root
-    password: root1234
+    password: root12345
+#    url: jdbc:mysql://eafinalproject.mysql.database.azure.com:3306/final_project_ea
+#    username: azure_root
+#    password: Root12345
     driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
@@ -33,3 +36,5 @@ spring:
               user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
               authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
               token-uri: https://www.googleapis.com/oauth2/v4/token
+  profiles:
+    active: test

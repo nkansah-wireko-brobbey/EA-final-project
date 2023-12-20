@@ -1,5 +1,6 @@
 package edu.miu.cs.cs544.service.impl;
 
+import edu.miu.cs.cs544.cs544.RetryExtension;
 import edu.miu.cs.cs544.domain.*;
 import edu.miu.cs.cs544.domain.adapter.ReservationAdapter;
 import edu.miu.cs.cs544.domain.dto.AuditDataDTO;
@@ -12,6 +13,7 @@ import edu.miu.cs.cs544.repository.ReservationRepository;
 import edu.miu.cs.cs544.service.ProductService;
 import edu.miu.cs.cs544.service.ReservationService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.runner.RunWith;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,6 +36,7 @@ import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
+@ExtendWith(RetryExtension.class)
 @SpringBootTest
 class ReservationServiceImplementationTest {
 
@@ -42,12 +45,6 @@ class ReservationServiceImplementationTest {
 
     @Autowired
     private ReservationService reservationService;
-
-    @MockBean
-    private ProductRepository productRepository;
-
-    @Autowired
-    private ProductService productService;
 
     @MockBean
     private CustomerRepository customerRepository;
@@ -66,27 +63,20 @@ class ReservationServiceImplementationTest {
 
     @Test
     void createReservation() throws CustomError {
-        //TODO FIX TEST
-//        double nightlyRate = 100;
-//        Product product = new Product(1, "Test Product", "Test Product", "This is a test product", ProductType.Room, nightlyRate, 2, true, null);
-//        List<Item> itemList = new ArrayList<>();
-//        Item item = new Item(1, 5, null, null, product, null);
-//        itemList.add(item);
-//        State stateDTO = new State(1, "22342", "Iowa", null);
-//        Address addressDTO = new Address(1,"123 Ave", null, "Fairfield", stateDTO, "54333", null);
-//        Customer customer = new Customer(1,"John","Doe", "john@gmail.com", null, addressDTO, addressDTO, null, null);
-////        customerDTO.setCustomerBillingAddressDTO(addressDTO);
-////        customerDTO.setCustomerBillingAddressDTO(addressDTO);
-////        ReservationDTO reservationDTO = new ReservationDTO(1, itemDTOList, null, ReservationType.NEW);
-////
-////        Mockito.when(productRepository.save(ProductAdapter.getProduct(productDTO))).thenReturn(ProductAdapter.getProduct(productDTO));
-//////        Mockito.when(customerRepository.save(CustomerAdapter.getCustomer(customerDTO))).thenReturn(CustomerAdapter.getCustomer(customerDTO));
-//
-//        Reservation reservation = new Reservation(1,customer, itemList, null, ReservationType.NEW);
-//        Mockito.when(customerRepository.findByEmail("john@gmail.com")).thenReturn(customer);
-//        Mockito.when(reservationRepository.save(reservation)).thenReturn(reservation);
-//        reservationService.createReservation(ReservationAdapter.getReservationDTO(reservation), customer.getEmail());
-//        Mockito.verify(reservationRepository, Mockito.times(1)).save(reservation);
+        double nightlyRate = 100;
+        Product product = new Product(1, "Test Product", "Test Product", "This is a test product", ProductType.Room, nightlyRate, 2, true, null);
+        List<Item> itemList = new ArrayList<>();
+        Item item = new Item(1, 5, null, null, product, null);
+        itemList.add(item);
+        State stateDTO = new State(1, "22342", "Iowa", null);
+        Address addressDTO = new Address(1,"123 Ave", null, "Fairfield", stateDTO, "54333", null);
+        Customer customer = new Customer(1,"John","Doe", "john@gmail.com", null, addressDTO, addressDTO, null, null);
+
+        Reservation reservation = new Reservation(1,customer, itemList, null, ReservationType.NEW);
+        Mockito.when(customerRepository.findByEmail("john@gmail.com")).thenReturn(customer);
+        Mockito.when(reservationRepository.save(reservation)).thenReturn(reservation);
+        reservationService.createReservation(ReservationAdapter.getReservationDTO(reservation));
+        Mockito.verify(reservationRepository, Mockito.times(1)).save(reservation);
 
     }
 
