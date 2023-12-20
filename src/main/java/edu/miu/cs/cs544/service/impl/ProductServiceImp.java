@@ -27,21 +27,16 @@ public class ProductServiceImp implements ProductService {
     private CustomerRepository customerRepository;
 
     @Override
-    public ProductDTO addProduct(ProductDTO productDTO, String email) {
+    public ProductDTO addProduct(ProductDTO productDTO, String email) throws CustomError {
         productDTO.setIsAvailable(true); //set the product to be available by default
-        Customer customer = customerRepository.findByEmail(email);
-        AuditData auditData = new AuditData();
-        auditData.setCreatedBy(customer.getEmail());
-        auditData.setUpdatedOn(LocalDateTime.now());
-        auditData.setCreatedOn(LocalDateTime.now());
-        auditData.setUpdatedBy(customer.getEmail());
-        productDTO.setAuditData(auditData);
+        productDTO.setAuditData(getAuditData(email));
         return ProductAdapter.getProductDTO(productRepository.save(ProductAdapter.getProduct(productDTO)));
     }
 
     @Override
-    public ProductDTO updateProduct(int id, ProductDTO productDTO) throws CustomError {
+    public ProductDTO updateProduct(int id, ProductDTO productDTO,String email) throws CustomError {
         productRepository.findById(id).orElseThrow(() -> new CustomError("Product with ID : " + id + " does not exist"));
+        productDTO.setAuditData(getAuditData(email));
         return ProductAdapter.getProductDTO(productRepository.save(ProductAdapter.getProduct(productDTO)));
     }
 
@@ -66,5 +61,14 @@ public class ProductServiceImp implements ProductService {
 
     public List<ProductDTO> getAllAvailableProducts() {
         return productRepository.findAll().stream().filter(Product::getIsAvailable).map(ProductAdapter::getProductDTO).toList();
+    }
+
+    private AuditData getAuditData(String email) {
+        AuditData auditData = new AuditData();
+        auditData.setCreatedBy(email);
+        auditData.setUpdatedOn(LocalDateTime.now());
+        auditData.setCreatedOn(LocalDateTime.now());
+        auditData.setUpdatedBy(email);
+        return auditData;
     }
 }
