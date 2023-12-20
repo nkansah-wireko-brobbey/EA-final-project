@@ -30,7 +30,7 @@ public class ReservationController {
 
     @PostMapping
     public ResponseEntity<?> createReservation(@Valid @RequestBody ReservationDTO reservationDTO) throws CustomError {
-        return new ResponseEntity<>(reservationService.createReservation(reservationDTO), HttpStatus.CREATED);
+        return new ResponseEntity<>(reservationService.createReservation(reservationDTO, getEmailFromAuthentication()), HttpStatus.CREATED);
     }
 
     @GetMapping("/{id}")
@@ -48,7 +48,7 @@ public class ReservationController {
     public ResponseEntity<?> updateProduct(@PathVariable int id, @Valid @RequestBody ReservationDTO reservationDTO) throws CustomError {
         return new ResponseEntity<>(reservationService.updateReservation(id, reservationDTO), HttpStatus.OK);
     }
-    @GetMapping("/{productType}")
+  @GetMapping("/{productType}")
     public ResponseEntity<List<ReservationDTO>> getAllReservationsByProductType(@PathVariable String productType) {
         try {
             List<ReservationDTO> reservationDTOList = reservationService.getAllReservationByProductType(ProductType.valueOf(productType));

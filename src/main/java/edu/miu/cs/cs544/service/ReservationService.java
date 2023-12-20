@@ -5,12 +5,16 @@ import edu.miu.cs.cs544.domain.CustomError;
 import edu.miu.cs.cs544.domain.ProductType;
 import edu.miu.cs.cs544.domain.ReservationType;
 import edu.miu.cs.cs544.domain.dto.ReservationDTO;
+import jakarta.transaction.Transactional;
 
 import java.util.List;
 
 public interface ReservationService {
 
-    ReservationDTO createReservation(ReservationDTO reservationDTO) throws CustomError;
+
+
+    @Transactional
+    ReservationDTO createReservation(ReservationDTO reservationDTO, String email) throws CustomError;
 
     ReservationDTO getReservation(int id) throws CustomError;
 
