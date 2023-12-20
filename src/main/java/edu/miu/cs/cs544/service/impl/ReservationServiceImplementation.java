@@ -43,8 +43,8 @@ public class ReservationServiceImplementation implements ReservationService {
 
     @Override
     @Transactional
-    public ReservationDTO createReservation(ReservationDTO reservationDTO, String email) throws CustomError {
-        Customer customer = customerRepository.findByEmail(email);
+   public ReservationDTO createReservation(ReservationDTO reservationDTO) throws CustomError {
+       /*  Customer customer = customerRepository.findByEmail(email);
         if (customer==null) {
             throw new CustomError(email + " is not valid", HttpStatus.NOT_FOUND);
         }
@@ -65,7 +65,8 @@ public class ReservationServiceImplementation implements ReservationService {
 
         }
 
-        return ReservationAdapter.getReservationDTO(reservationRepository.save(reservation));
+        return ReservationAdapter.getReservationDTO(reservationRepository.save(reservation));*/
+        return null;
     }
 
     @Override
@@ -178,12 +179,5 @@ public class ReservationServiceImplementation implements ReservationService {
         return auditData;
     }
 
-    private AuditData getAuditData(String email) {
-        AuditData auditData = new AuditData();
-        auditData.setCreatedBy(email);
-        auditData.setUpdatedOn(LocalDateTime.now());
-        auditData.setCreatedOn(LocalDateTime.now());
-        auditData.setUpdatedBy(email);
-        return auditData;
-    }
+
 }
