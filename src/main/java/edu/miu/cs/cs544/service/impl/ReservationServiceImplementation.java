@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -42,20 +43,14 @@ public class ReservationServiceImplementation implements ReservationService {
 
     @Override
     @Transactional
-    public ReservationDTO createReservation(ReservationDTO reservationDTO) throws CustomError {
-        //        Write logic
-
-        Customer c = new Customer();
-
-
-        Customer saved = customerRepository.save(c);
-        Reservation reservation = ReservationAdapter.getReservation(reservationDTO);
-        reservation.setCustomer(saved);
-
-
-        if (customerRepository.findById(reservation.getCustomer().getId()).isEmpty()) {
-            throw new CustomError(saved.getId() + " is not valid", HttpStatus.NOT_FOUND);
+    public ReservationDTO createReservation(ReservationDTO reservationDTO, String email) throws CustomError {
+        Customer customer = customerRepository.findByEmail(email);
+        if (customer==null) {
+            throw new CustomError(email + " is not valid", HttpStatus.NOT_FOUND);
         }
+        Reservation reservation = ReservationAdapter.getReservation(reservationDTO);
+        reservation.setCustomer(customer);
+        reservation.setAuditData(getAuditData(email));
 
         List<Item> itemList = reservation.getItems();
         for (Item item : itemList) {
@@ -94,7 +89,6 @@ public class ReservationServiceImplementation implements ReservationService {
                         Collectors
                                 .toList()
                 );
-//        System.out.println("Reservation Full Data : "+reservationRepository.findAll());
         return reservationDTOList;
     }
 
@@ -125,5 +119,14 @@ public class ReservationServiceImplementation implements ReservationService {
     public List<ReservationDTO> getAllReservationByReservationType(ReservationType reservationType) {
 //        Write Logic
         return null;
+    }
+
+    private AuditData getAuditData(String email) {
+        AuditData auditData = new AuditData();
+        auditData.setCreatedBy(email);
+        auditData.setUpdatedOn(LocalDateTime.now());
+        auditData.setCreatedOn(LocalDateTime.now());
+        auditData.setUpdatedBy(email);
+        return auditData;
     }
 }
