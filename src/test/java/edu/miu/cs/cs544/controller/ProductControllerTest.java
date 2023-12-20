@@ -1,8 +1,10 @@
 package edu.miu.cs.cs544.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.miu.cs.cs544.domain.Customer;
 import edu.miu.cs.cs544.domain.ProductType;
 import edu.miu.cs.cs544.domain.dto.ProductDTO;
+import edu.miu.cs.cs544.repository.CustomerRepository;
 import edu.miu.cs.cs544.service.ProductService;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mockito;
@@ -11,10 +13,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
-
 import java.util.List;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -37,21 +39,20 @@ class ProductControllerTest {
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isCreated());
         //verify
-        Mockito.verify(productService, Mockito.times(1)).addProduct(productDTO);
+        Mockito.verify(productService, Mockito.times(1)).addProduct(productDTO, null);
     }
 
     @Test
     void updateProduct() throws Exception {
         double nightlyRate = 100;
         ProductDTO productDTO = new ProductDTO(2, "Test Product", "Test Product", "This is a test product", ProductType.Room, nightlyRate, 2, true, null);
-
         // Act and Assert
         mockMvc.perform(MockMvcRequestBuilders.put("/api/products/2")
                         .content(new ObjectMapper().writeValueAsString(productDTO))
                         .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
         // Verify
-        Mockito.verify(productService, Mockito.times(1)).updateProduct(2, productDTO);
+        Mockito.verify(productService, Mockito.times(1)).updateProduct(2, productDTO,null);
     }
 
     @Test
@@ -83,5 +84,5 @@ class ProductControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").value(1))
                 .andExpect(MockMvcResultMatchers.jsonPath("$[1].id").value(2));
     }
-    
+
 }

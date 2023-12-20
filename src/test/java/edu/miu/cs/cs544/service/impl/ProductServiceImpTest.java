@@ -43,11 +43,11 @@ class ProductServiceImpTest {
 
 
     @Test
-    void addProduct() {
+    void addProduct() throws CustomError {
         double nightlyRate = 100;
         ProductDTO productDTO = new ProductDTO(2, "Test Product", "Test Product", "This is a test product", ProductType.Room, nightlyRate, 2, true, null);
         Mockito.when(productRepository.save(ProductAdapter.getProduct(productDTO))).thenReturn(ProductAdapter.getProduct(productDTO));
-        productService.addProduct(productDTO);
+        productService.addProduct(productDTO,"test@gmail.com");
         Mockito.verify(productRepository, Mockito.times(1)).save(ProductAdapter.getProduct(productDTO));
     }
 
@@ -57,7 +57,7 @@ class ProductServiceImpTest {
         double nightlyRate = 100;
         ProductDTO productDTO = new ProductDTO(2, "Test Product", "Test Product", "This is a test product", ProductType.Room, nightlyRate, 2, true, null);
         Mockito.when(productRepository.save(ProductAdapter.getProduct(productDTO))).thenReturn(ProductAdapter.getProduct(productDTO));
-        ProductDTO savedProductDTO = productService.addProduct(productDTO);
+        ProductDTO savedProductDTO = productService.addProduct(productDTO,"test@gmail.com");
         Mockito.verify(productRepository, Mockito.times(1)).save(ProductAdapter.getProduct(productDTO));
 
         //update the product
@@ -66,7 +66,7 @@ class ProductServiceImpTest {
 
         Mockito.when(productRepository.save(ProductAdapter.getProduct(savedProductDTO))).thenReturn(ProductAdapter.getProduct(savedProductDTO));
         Mockito.when(productRepository.findById(savedProductDTO.getId())).thenReturn(Optional.of(ProductAdapter.getProduct(savedProductDTO)));
-        ProductDTO updateProductDTO = productService.updateProduct(savedProductDTO.getId(), savedProductDTO);
+        ProductDTO updateProductDTO = productService.updateProduct(savedProductDTO.getId(), savedProductDTO,"test@test.com");
         Mockito.verify(productRepository, Mockito.times(1)).save(ProductAdapter.getProduct(savedProductDTO));
 
         assertEquals(updateProductDTO.getName(), "Updated Test Product");
