@@ -18,6 +18,7 @@ import org.springframework.security.oauth2.server.resource.authentication.JwtAut
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -85,6 +86,8 @@ public class ReservationServiceImplementation implements ReservationService {
         if (email==null)
             throw new CustomError("Email does not exist");
 
+        System.out.println("User Email: "+email);
+
         User user = userRepository.findByEmail(email);
         if (user==null)
             throw new CustomError("User does not exist");
@@ -109,14 +112,30 @@ public class ReservationServiceImplementation implements ReservationService {
         if (reservation.isPresent())
             return ReservationAdapter.getReservationDTO(reservation.get());
 
-        throw new CustomError("Reservation with ID: " + id + " not found");
+        throw new CustomError("Reservation with ID: " + id + " not found",HttpStatus.NOT_FOUND);
 
     }
 
     @Override
     @Transactional
     public List<ReservationDTO> getAllReservation() throws CustomError {
-        List<ReservationDTO> reservationDTOList = reservationRepository
+        String email = getEmailFromAuthentication();
+        if (email==null)
+            throw new CustomError("Email does not exist");
+
+        System.out.println("User Email: "+email);
+
+        User user = userRepository.findByEmail(email);
+        if (user==null)
+            throw new CustomError("User does not exist");
+
+        RoleType roleType = user.getRoleType();
+
+        List<ReservationDTO> reservationDTOList = new ArrayList<>();
+
+        if (roleType == RoleType.ADMIN){
+
+       reservationDTOList = reservationRepository
                 .findAll()
                 .stream()
                 .map(ReservationAdapter::getReservationDTO)
@@ -124,6 +143,27 @@ public class ReservationServiceImplementation implements ReservationService {
                         Collectors
                                 .toList()
                 );
+
+        }else{
+
+            Customer customer = customerRepository.findCustomerByUser(user);
+
+            if (customer == null)
+                throw new CustomError("Customer not found");
+
+
+            reservationDTOList = reservationRepository.findReservationsByCustomer(customer)
+                    .stream()
+                    .map(ReservationAdapter::getReservationDTO)
+                    .collect(
+                            Collectors
+                                    .toList()
+                    );
+        }
+
+        if (reservationDTOList.size() <= 0)
+            throw new CustomError("No reservations found",HttpStatus.NOT_FOUND);
+
         return reservationDTOList;
     }
 
