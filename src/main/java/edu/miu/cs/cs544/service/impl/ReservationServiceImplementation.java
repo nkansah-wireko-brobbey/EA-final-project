@@ -6,6 +6,7 @@ import edu.miu.cs.cs544.domain.dto.ReservationDTO;
 import edu.miu.cs.cs544.repository.CustomerRepository;
 import edu.miu.cs.cs544.repository.ProductRepository;
 import edu.miu.cs.cs544.repository.ReservationRepository;
+import edu.miu.cs.cs544.repository.UserRepository;
 import edu.miu.cs.cs544.service.ReservationService;
 import jakarta.transaction.Transactional;
 import lombok.NoArgsConstructor;
@@ -35,13 +36,15 @@ public class ReservationServiceImplementation implements ReservationService {
     @Autowired
     private final ProductRepository productRepository;
 
+    @Autowired
+    private UserRepository userRepository;
+
     public ReservationServiceImplementation(CustomerRepository customerRepository,
                                             ReservationRepository reservationRepository,
                                             ProductRepository productRepository) {
         this.customerRepository = customerRepository;
         this.reservationRepository = reservationRepository;
         this.productRepository = productRepository;
-
     }
 
 
@@ -75,7 +78,32 @@ public class ReservationServiceImplementation implements ReservationService {
 
     @Override
     public ReservationDTO getReservation(int id) throws CustomError {
-        Optional<Reservation> reservation = reservationRepository.findById(id);
+
+        String email = getEmailFromAuthentication();
+        if (email==null)
+            throw new CustomError("Email does not exist");
+
+        User user = userRepository.findByEmail(email);
+        if (user==null)
+            throw new CustomError("User does not exist");
+
+        RoleType roleType = user.getRoleType();
+        Optional<Reservation> reservation;
+
+        if (roleType == RoleType.ADMIN)
+        {
+        reservation = reservationRepository.findById(id);
+
+        }else{
+            Customer customer = customerRepository.findCustomerByUser(user);
+
+            if (customer == null)
+                throw new CustomError("Customer not found");
+
+            reservation = reservationRepository.findReservationByIdAndCustomer(id,customer);
+        }
+
+
         if (reservation.isPresent())
             return ReservationAdapter.getReservationDTO(reservation.get());
 
