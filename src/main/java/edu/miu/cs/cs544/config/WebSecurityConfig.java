@@ -52,11 +52,11 @@ public class WebSecurityConfig {
                 )
                 .formLogin(formLogin ->
                         formLogin
-                                .defaultSuccessUrl("/api/userEmail", true)
+                                .defaultSuccessUrl("/", true)
                 )
                 .oauth2Login(oauth2Login ->
                         oauth2Login
-                                .defaultSuccessUrl("/api/userEmail", true)
+                                .defaultSuccessUrl("/", true)
                 )
                 .oauth2Client(Customizer.withDefaults())
                 .oauth2ResourceServer(oauth2ResourceServer ->

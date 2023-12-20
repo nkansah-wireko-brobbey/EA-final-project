@@ -94,16 +94,25 @@ public String resetPassword(@RequestBody PasswordDTO passwordDTO, HttpServletReq
         }
         return url;
     }
-    @GetMapping("/api/userEmail")
+    @GetMapping("/")
     public ResponseEntity<?> hello(Authentication authentication) throws CustomError{
        return new ResponseEntity<>(getEmailFromAuthentication(authentication), HttpStatus.OK);
     }
-    private String getEmailFromAuthentication(Authentication authentication) {
+    private String getEmailFromAuthentication(Authentication authentication) throws CustomError {
         if (authentication instanceof JwtAuthenticationToken jwtAuthenticationToken) {
             return (String) jwtAuthenticationToken.getTokenAttributes().get("email");
         } else if (authentication instanceof UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken) {
             return usernamePasswordAuthenticationToken.getName();
-        } else {
+        }
+        else if (authentication != null && authentication.getPrincipal() instanceof OAuth2AuthenticatedPrincipal oauth2User) {
+            String email = oauth2User.getAttribute("email");
+            Customer user = customerRepository.findByEmail(email);
+            if(user== null){
+                throw new CustomError("User not found", HttpStatus.BAD_REQUEST);
+            }
+            return user.getEmail();
+        }
+        else {
             throw new IllegalArgumentException("Authentication method not supported");
         }
     }
