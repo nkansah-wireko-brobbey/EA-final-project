@@ -69,7 +69,7 @@ public class ReservationServiceImplementation implements ReservationService {
                 availableItem.get().setIsAvailable(false);
                 productRepository.save(availableItem.get());
             }
-
+            item.setAuditData(getAuditData(email));
         }
 
         return ReservationAdapter.getReservationDTO(reservationRepository.save(reservation));
@@ -111,6 +111,7 @@ public class ReservationServiceImplementation implements ReservationService {
             // Update product availability
             List<Item> updatedItemList = updatedReservation.getItems();
             List<Item> existingItemList = existingReservation.get().getItems();
+            AuditData auditData = new AuditData();
 
             for (Item updatedItem : updatedItemList) {
                 Optional<Product> existingProduct = productRepository.findById(updatedItem.getProduct().getId());
@@ -125,16 +126,28 @@ public class ReservationServiceImplementation implements ReservationService {
                     // Update availability for the new product
                     Optional<Product> updatedProduct = productRepository.findById(updatedItem.getProduct().getId());
                     if (updatedProduct.isPresent()) {
-                        if (!updatedProduct.get().getIsAvailable()) {
-                            throw new CustomError(updatedProduct.get().getName() + " is not available");
+                        for(Item existingItem: existingItemList){
+                            if(updatedItem.getId() != existingItem.getId()){
+                                if (!updatedProduct.get().getIsAvailable()) {
+                                    throw new CustomError(updatedProduct.get().getName() + " is not available");
+                                }
+                            }
                         }
+
+
                         updatedProduct.get().setIsAvailable(false);
                         productRepository.save(updatedProduct.get());
                     }
                 }
+                auditData.setUpdatedBy(getEmailFromAuthentication());
+                auditData.setUpdatedOn(LocalDateTime.now());
+                auditData.setCreatedOn(existingReservation.get().getAuditData().getCreatedOn());
+                auditData.setCreatedBy(existingReservation.get().getAuditData().getCreatedBy());
+                updatedItem.setAuditData(auditData);
             }
 
             // Save the updated reservation
+            updatedReservation.setAuditData(auditData);
             Reservation savedReservation = reservationRepository.save(updatedReservation);
             return ReservationAdapter.getReservationDTO(savedReservation);
         } else {
