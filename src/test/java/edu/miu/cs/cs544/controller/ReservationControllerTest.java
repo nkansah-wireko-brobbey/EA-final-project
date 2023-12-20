@@ -1,5 +1,7 @@
 package edu.miu.cs.cs544.controller;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import edu.miu.cs.cs544.domain.CustomError;
 import edu.miu.cs.cs544.domain.ProductType;
 import edu.miu.cs.cs544.domain.ReservationType;
 import edu.miu.cs.cs544.domain.adapter.ReservationAdapter;
@@ -9,18 +11,20 @@ import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import edu.miu.cs.cs544.domain.dto.ReservationDTO;
 import edu.miu.cs.cs544.service.ReservationService;
 import org.junit.jupiter.api.Test;
+import org.mockito.Mock;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -38,52 +42,28 @@ class ReservationControllerTest {
     private MockMvc mockMvc;
 
     @Test
-    @WithMockUser(username = "testUser", roles = "USER")
     public void createReservation() throws Exception {
-//        TODO FIX
-////        double nightlyRate = 100;
-////        ProductDTO productDTO = new ProductDTO(2, "Test Product", "Test Product", "This is a test product", ProductType.Room, nightlyRate, 2, true, null);
-////        List<ItemDTO> itemDTOList = new ArrayList<>();
-////        ItemDTO itemDTO1 = new ItemDTO(1, 5, null, null, productDTO, null);
-////        itemDTOList.add(itemDTO1);
-////        ReservationDTO reservationDTO = new ReservationDTO(13, itemDTOList, null, ReservationType.NEW);
-////        mockMvc.perform(MockMvcRequestBuilders.post("/api/reservations")
-////                        .content(new ObjectMapper().writeValueAsString(reservationDTO))
-////                        .contentType(MediaType.APPLICATION_JSON))
-////                .andExpect(status().isCreated());
-////        Mockito.verify(reservationService, Mockito.times(1)).createReservation(reservationDTO, "jonny@gmail.com");
-//
-//        double nightlyRate = 100;
-//        ProductDTO productDTO = new ProductDTO(2, "Test Product", "Test Product", "This is a test product", ProductType.Room, nightlyRate, 2, true, null);
-//        List<ItemDTO> itemDTOList = new ArrayList<>();
-//        ItemDTO itemDTO1 = new ItemDTO(1, 5, null, null, productDTO, null);
-//        itemDTOList.add(itemDTO1);
-//        ReservationDTO reservationDTO = new ReservationDTO(13, itemDTOList, null, ReservationType.NEW);
-//
-//        // Mock the behavior of the reservationService
-//
-//        Mockito.when(reservationService.createReservation(eq(reservationDTO), anyString()))
-//                .thenReturn();
-//
-//        mockMvc.perform(post("/api/reservations")
-//                        .content(new ObjectMapper().writeValueAsString(reservationDTO))
-//                        .contentType(MediaType.APPLICATION_JSON))
-//                .andExpect(status().isCreated());
-//
-//        // Verify that the createReservation method of reservationService was called with the expected arguments
-//        Mockito.verify(reservationService, Mockito.times(1)).createReservation(eq(reservationDTO), anyString());
+        double nightlyRate = 100;
+        ProductDTO productDTO = new ProductDTO(2, "Test Product", "Test Product", "This is a test product", ProductType.Room, nightlyRate, 2, true, null);
+        List<ItemDTO> itemDTOList = new ArrayList<>();
+        ItemDTO itemDTO1 = new ItemDTO(1, 5, null, null, productDTO, null);
+        itemDTOList.add(itemDTO1);
+        ReservationDTO reservationDTO = new ReservationDTO(13, itemDTOList, null, ReservationType.NEW);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/reservations")
+                        .content(new ObjectMapper().writeValueAsString(reservationDTO))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isCreated());
+      //  Mockito.verify(reservationService, Mockito.times(1)).createReservation(reservationDTO);
 
     }
 
     @Test
-    @WithMockUser(username = "testname", roles = "Client")
     public void deleteReservation() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/reservations/1")).andExpect(status().isOk());
         Mockito.verify(reservationService, Mockito.times(1)).deleteReservation(1);
     }
 
     @Test
-    @WithMockUser(username = "testname", roles = "Client")
     public void getReservationTest() throws Exception {
     ReservationDTO reservationDTO = createDummyReservationDTO(1);
     Integer reservationId = ReservationAdapter.getReservation(reservationDTO).getId();
@@ -97,12 +77,14 @@ class ReservationControllerTest {
 
     }
     @Test
-    @WithMockUser(username = "testname", roles = "Client")
     public void getAllReservationTest() throws Exception {
     ReservationDTO reservationDTO = createDummyReservationDTO(1);
     ReservationDTO reservationDTO2 = createDummyReservationDTO(2);
 
     ReservationAdapter.getReservation(reservationDTO2).setId(2);
+
+    Integer reservationId = ReservationAdapter.getReservation(reservationDTO).getId();
+    Integer reservationId2 = ReservationAdapter.getReservation(reservationDTO2).getId();
 
     List<ReservationDTO> reservationDTOList = List.of(reservationDTO,reservationDTO2);
 

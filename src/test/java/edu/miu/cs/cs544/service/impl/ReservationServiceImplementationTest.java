@@ -13,7 +13,6 @@ import edu.miu.cs.cs544.service.ProductService;
 import edu.miu.cs.cs544.service.ReservationService;
 import org.junit.jupiter.api.Test;
 import org.junit.runner.RunWith;
-import org.mockito.ArgumentCaptor;
 import org.mockito.Mockito;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -21,12 +20,6 @@ import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.test.context.junit4.SpringRunner;
-import static org.mockito.ArgumentMatchers.eq;
-import static org.mockito.Mockito.anyString;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.when;
-
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -36,12 +29,7 @@ import java.util.Optional;
 
 import java.util.ArrayList;
 
-//import static jdk.internal.org.objectweb.asm.util.CheckClassAdapter.verify;
-import static org.hamcrest.Matchers.any;
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.mockito.ArgumentMatchers.anyInt;
-import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.when;
 
@@ -74,6 +62,7 @@ class ReservationServiceImplementationTest {
             return new ReservationServiceImplementation(customerRepository,reservationRepository,productRepository);
         }
     }
+
 
     @Test
     void createReservation() throws CustomError {
