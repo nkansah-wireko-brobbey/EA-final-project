@@ -43,8 +43,8 @@ public class ReservationServiceImplementation implements ReservationService {
 
     @Override
     @Transactional
-    public ReservationDTO createReservation(ReservationDTO reservationDTO, String email) throws CustomError {
-        Customer customer = customerRepository.findByEmail(email);
+   public ReservationDTO createReservation(ReservationDTO reservationDTO) throws CustomError {
+       /*  Customer customer = customerRepository.findByEmail(email);
         if (customer==null) {
             throw new CustomError(email + " is not valid", HttpStatus.NOT_FOUND);
         }
@@ -65,7 +65,8 @@ public class ReservationServiceImplementation implements ReservationService {
 
         }
 
-        return ReservationAdapter.getReservationDTO(reservationRepository.save(reservation));
+        return ReservationAdapter.getReservationDTO(reservationRepository.save(reservation));*/
+        return null;
     }
 
     @Override
@@ -94,8 +95,45 @@ public class ReservationServiceImplementation implements ReservationService {
 
     @Override
     public ReservationDTO updateReservation(int id, ReservationDTO reservationDTO) throws CustomError {
-        //        Write logic
-        return null;
+        Optional<Reservation> existingReservation = reservationRepository.findById(id);
+
+        if (existingReservation.isPresent()) {
+            Reservation updatedReservation = ReservationAdapter.getReservation(reservationDTO);
+            updatedReservation.setId(id);
+            updatedReservation.setCustomer(existingReservation.get().getCustomer());
+
+            // Update product availability
+            List<Item> updatedItemList = updatedReservation.getItems();
+            List<Item> existingItemList = existingReservation.get().getItems();
+
+            for (Item updatedItem : updatedItemList) {
+                Optional<Product> existingProduct = productRepository.findById(updatedItem.getProduct().getId());
+
+                if (existingProduct.isPresent()) {
+                    // Restore availability for the previous product
+                    if (existingItemList.stream().noneMatch(item -> item.getProduct().getId().equals(updatedItem.getProduct().getId()))) {
+                        existingProduct.get().setIsAvailable(true);
+                        productRepository.save(existingProduct.get());
+                    }
+
+                    // Update availability for the new product
+                    Optional<Product> updatedProduct = productRepository.findById(updatedItem.getProduct().getId());
+                    if (updatedProduct.isPresent()) {
+                        if (!updatedProduct.get().getIsAvailable()) {
+                            throw new CustomError(updatedProduct.get().getName() + " is not available");
+                        }
+                        updatedProduct.get().setIsAvailable(false);
+                        productRepository.save(updatedProduct.get());
+                    }
+                }
+            }
+
+            // Save the updated reservation
+            Reservation savedReservation = reservationRepository.save(updatedReservation);
+            return ReservationAdapter.getReservationDTO(savedReservation);
+        } else {
+            throw new CustomError("Reservation with ID: " + id + " not found");
+        }
     }
 
     @Override
@@ -111,16 +149,27 @@ public class ReservationServiceImplementation implements ReservationService {
 
     @Override
     public List<ReservationDTO> getAllReservationByProductType(ProductType productType) {
-        //        Write Logic
-        return null;
+        List<ReservationDTO> reservationDTOList = reservationRepository
+                .findAllProduct_ProductType(productType)
+                .stream()
+                .map((Object reservation) -> ReservationAdapter.getReservationDTO((Reservation) reservation))
+                .collect(Collectors.toList());
+
+        return reservationDTOList;
+
     }
 
     @Override
     public List<ReservationDTO> getAllReservationByReservationType(ReservationType reservationType) {
-//        Write Logic
-        return null;
-    }
+        List<ReservationDTO> reservationDTOList = reservationRepository
+                .findAllByReservationType(reservationType)
+                .stream()
+                .map((Object reservation) -> ReservationAdapter.getReservationDTO((Reservation) reservation))
+                .collect(Collectors.toList());
 
+        return reservationDTOList;
+
+    }
     private AuditData getAuditData(String email) {
         AuditData auditData = new AuditData();
         auditData.setCreatedBy(email);
@@ -129,4 +178,6 @@ public class ReservationServiceImplementation implements ReservationService {
         auditData.setUpdatedBy(email);
         return auditData;
     }
+
+
 }

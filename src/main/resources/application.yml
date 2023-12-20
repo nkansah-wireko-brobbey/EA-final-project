@@ -36,5 +36,3 @@ spring:
               user-info-uri: https://www.googleapis.com/oauth2/v3/userinfo
               authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
               token-uri: https://www.googleapis.com/oauth2/v4/token
-  profiles:
-    active: test
