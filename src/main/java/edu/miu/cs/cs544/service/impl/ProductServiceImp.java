@@ -2,11 +2,9 @@ package edu.miu.cs.cs544.service.impl;
 
 import edu.miu.cs.cs544.domain.AuditData;
 import edu.miu.cs.cs544.domain.CustomError;
-import edu.miu.cs.cs544.domain.Customer;
 import edu.miu.cs.cs544.domain.Product;
 import edu.miu.cs.cs544.domain.dto.ProductDTO;
 import edu.miu.cs.cs544.domain.adapter.ProductAdapter;
-import edu.miu.cs.cs544.repository.CustomerRepository;
 import edu.miu.cs.cs544.repository.ProductRepository;
 import edu.miu.cs.cs544.service.ProductService;
 import jakarta.transaction.Transactional;
@@ -26,9 +24,6 @@ import java.util.Map;
 public class ProductServiceImp implements ProductService {
     @Autowired
     private ProductRepository productRepository;
-
-    @Autowired
-    private CustomerRepository customerRepository;
 
     @Override
     public ProductDTO addProduct(ProductDTO productDTO) throws CustomError {
@@ -78,7 +73,7 @@ public class ProductServiceImp implements ProductService {
     }
     private String getEmailFromAuthentication(){
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
-        if(authentication ==null) {
+        if(authentication !=null) {
             JwtAuthenticationToken jwtAuthenticationToken = (JwtAuthenticationToken) authentication;
             Map<String, Object> attributes = jwtAuthenticationToken.getTokenAttributes();
             return (String) attributes.get("email");
