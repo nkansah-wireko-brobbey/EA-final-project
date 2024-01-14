@@ -25,6 +25,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @NoArgsConstructor(force = true)
+@Transactional
 @Service
 public class ReservationServiceImplementation implements ReservationService {
 

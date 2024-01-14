@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/final_project_ea?useSSL=false&serverTimezone=UTC
+    url: jdbc:mysql://localhost:3306/notes_app?useSSL=false&serverTimezone=UTC
     username: root
     password: root12345
 #    url: jdbc:mysql://eafinalproject.mysql.database.azure.com:3306/final_project_ea
@@ -37,4 +37,16 @@ spring:
               authorization-uri: https://accounts.google.com/o/oauth2/v2/auth
               token-uri: https://www.googleapis.com/oauth2/v4/token
   profiles:
-    active: prod
+    active: test
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "logfile"
+  endpoint:
+    shutdown:
+      enabled: true
+logging:
+  file:
+    name: mylog.log
